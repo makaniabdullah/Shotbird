@@ -1,0 +1,23 @@
+Shotbird crew skill packs (markdown only, pinned commits; each folder keeps its ATTRIBUTION.md and licence):
+
+- Crew skills (markdown/data only, pinned commits; scripts/db/settings never installed; see each ATTRIBUTION.md):
+  sb-creative-director      smixs/creative-director-skill @ac06eb2 (CC-BY-4.0)        Scout
+  sb-brand-forensics        higgsfield-ai/skills @f83af0b asset-analysis.md (MIT) + Shotbird wrapper   Scout
+  sb-sw-story-structure, sb-sw-premise-theme, sb-sw-series-engine-bible   jtydhr88/screenwriting-skills @51115f1 (MIT)   Scout/Lore
+  sb-visual-image, sb-visual-video   smixs/visual-skills @92be33a (CC-BY-4.0)        Hatch / Slate, Cue
+  sb-higgsfield             OSideMedia/higgsfield-ai-prompt-skill @7075497 (MIT)    Hatch, Slate, Cue
+  sb-video-prompting        Square-Zero-Labs/video-prompting-skill @8d72999 (Apache-2.0)   Hatch, Cue
+  sb-video-qa               A0339x/ai-film-pipeline @5314221 (MIT) — patched: no self-install/uploads   Hawk
+  sb-continuity-bible, sb-storyboard-shot-design, sb-continuity-axis-match, sb-shot-size-angle   nolanx-ai/nolanx.ai @595d863 (MIT)   Hawk, Lore, Slate
+- Wave 2 (2026-10-20, second GitHub sweep; same rules: markdown/data only, pinned, attributed):
+  Scout: sb-brief-grader (efesorjm/creative-brief @6274f14 MIT), sb-brand-lock-extractor (whystrohm/shotkit @ac209c5 Apache-2.0),
+         sb-brief-scoping (iart-ai/freelance-motion-skills @d85c2b4 MIT), sb-brand-launch-film + sb-product-ad-film (calesthio/generative-media-skills @8c85352 MIT)
+  Hatch: sb-character-design-continuity, sb-production-design, sb-reference-media-analysis (calesthio @8c85352 MIT), sb-scene-asset (62656456/ai-film-skills @f1fee05 Apache-2.0)
+  Slate: sb-lighting-direction, sb-storyboard-previs (calesthio @8c85352 MIT); DirectorSKILL refs via sb-director-book
+  Hawk:  sb-character-continuity (Nagacash/character-continuity-skill @9775780 MIT/CC-BY), sb-visual-qa-evidence (LUC4N3X/antigravity-thalarch @3c1ceaf MIT),
+         sb-frame-qc-refs (leynos/visual-storytelling-skills @ecf6cc2 ISC + olegspiridonovdev-spec/photoreal-image-skill @69b61b7 MIT + Shotbird router)
+  Lore:  sb-director-book (wuwangzhang1216/DirectorSKILL @c65ae0d MIT), sb-visual-style-direction (calesthio), sb-video-delivery-specs (iart-ai @d85c2b4 MIT), sb-treatment-writer (ur-grue/autopunk-media-skills @39e119b MIT)
+  Cue:   sb-still-motion-director (LiamGvchi/gc-still-image-motion-director @e619b0b MIT), sb-veo-prompting + sb-dialogue-and-voice + sb-wan-3-prompting (raphaelbgr/ai-video-prompting @7c56aac MIT),
+         sb-kling-higgsfield-notes (leynos @ecf6cc2 ISC)
+
+cinema-director-v3: Abdullah Makani's prompting skill, shared with the team by its author.

@@ -1,0 +1,115 @@
+# scene-asset — environment and spatial contract
+
+| Status | Current local rule patch included in v1.4.0; generated-image review and user acceptance remain separate. |
+|---|---|
+| Can deliver alone | A main reference plus a separate reverse view by default; expand to multi-camera views or a nine-view sheet only when requested, preserving one space and state. |
+| Cannot claim alone | It does not decide story blocking or prove that generated scene images are spatially consistent without inspection. |
+
+[Runtime `SKILL.md`](../../../skills/scene-asset/SKILL.md) · [v1.4.0 ZIP](https://github.com/62656456/ai-film-skills/releases/download/v1.4.0/scene-asset.zip) · [Install](../../INSTALLATION.md) · [Compatibility](../../COMPATIBILITY.md) · [Design system](../../SKILL_DESIGN_SYSTEM.md)
+
+Fixed v1.4.0 release snapshot. Check the archive manifest and Skill version; experimental status is unchanged.
+
+<!-- contract:purpose -->
+## 1. Purpose
+
+Define a reusable environment through layout, entrances, exits, landmarks, scale, lighting, materials, camera access, and continuity states.
+
+<!-- contract:principles -->
+## 2. Design principles
+
+- Establish an auditable, versioned asset identity before storyboard or video production.
+- Platform adaptation may change syntax, never approved `locked_features` or state history.
+- A static asset contract separates identity, allowed state changes, materials, geometry, lighting, and downstream references.
+- Derive attention, separation, source-based lighting, scale and detail hierarchy together. Single-image requests do not become mandatory contact sheets; new plastic and designed emission remain valid when specified.
+- Reuse unchanged source context for local revisions. Asset identifiers remain internal; unapproved references block formal generation, not candidate text design.
+- A scene is a navigable world model, not one attractive angle; reverse views must derive from the same layout.
+
+<!-- contract:standalone -->
+## 3. Standalone scope
+
+Use this module by itself when the requested result stays inside the following boundary:
+
+A main reference plus a separate reverse view by default; expand to multi-camera views or a nine-view sheet only when requested, preserving one space and state.
+
+**Cannot claim alone:** It does not decide story blocking or prove that generated scene images are spatially consistent without inspection.
+
+<!-- contract:inputs -->
+## 4. Inputs
+
+- A unique asset ID, version, purpose, known source facts, and fields that remain unknown.
+- Required views, states, scale references, target platform, and any approved reference images.
+- Downstream continuity needs such as locked features, variable states, orientation, handling, or spatial anchors.
+
+<!-- contract:workflow -->
+## 5. Workflow
+
+1. Choose prompt-only, actual-image or scoped-diagnosis delivery and photographic, 3D-animation or 2D/illustration imaging before using a template.
+2. Extract required dimensions and mark missing facts instead of inventing them.
+3. Lock identity, geometry, materials, physical behavior, lighting, and state rules.
+4. Choose the necessary views or state plates and compile a platform-aware generation task.
+5. Run the module checklist and create the machine-readable asset contract.
+6. For text-only delivery, pixel checks remain not_evaluated. Actual image failures are rework; only explicit human review can approve an asset.
+
+<!-- contract:returns -->
+## 6. Return, rework, and rollback
+
+- Missing identity or state facts return to intake; geometry, material, lighting, or interaction failures return to the responsible contract field.
+- Cross-view drift returns to locked features and the primary reference; it is not repaired by adding unrelated style words.
+- A failed review remains `rework`; structural completion cannot auto-promote it.
+
+<!-- contract:review -->
+## 7. Review gates
+
+- [ ] ID, version, purpose, required dimensions, locked features, and unknowns are explicit.
+- [ ] Proportion, perspective, geometry, materials, contact, weight, shadows, and readable key faces are physically coherent.
+- [ ] No extra limbs, objects, text, watermark, drift, or background competition compromises the reference.
+- [ ] Entrances, exits, fixed landmarks, light sources, scale, navigable routes, and reverse views agree in one spatial model.
+
+<!-- contract:pass -->
+## 8. Pass standard and states
+
+- The asset task and JSON contract pass the module checklist with no unresolved blocking field.
+- `assets_approved` requires inspection of the actual reference images; a text contract alone remains pending review.
+
+> A pass below means this module's stated gates were met. Structural validity, real-task evidence, and user acceptance remain separate states.
+
+<!-- contract:outputs -->
+## 9. Outputs
+
+- A primary reference-image task plus only the necessary alternate views or state plates.
+- A versioned JSON asset contract for storyboard, prompts, and QC.
+
+<!-- contract:boundaries -->
+## 10. Boundaries, dependencies, and permissions
+
+- Do not invent missing source facts, overwrite approved features, or put video action and dialogue into a static asset identity.
+- Without an image tool and visual review, this module delivers a generation task and contract, not finished reference images.
+- Interaction descriptions do not add an image task; text stays text and image quantity follows the user's scope.
+
+<!-- contract:agents -->
+## 11. Cross-Agent use
+
+- The canonical package is the complete Skill folder, not a copied prompt fragment.
+- `agents/openai.yaml` is optional Codex UI metadata and is not a runtime dependency for other hosts.
+- Text contracts work in any host that can read the folder. Producing and approving actual reference images additionally requires an image tool, file access, and human visual review.
+- An Agent may read the instructions without native Skill discovery, but prompt-only reading must not be described as native integration.
+
+<!-- contract:sources -->
+## 12. Source files and references
+
+**Runtime and metadata**
+
+- [`agents/openai.yaml`](../../../skills/scene-asset/agents/openai.yaml)
+- [`SKILL.md`](../../../skills/scene-asset/SKILL.md)
+
+**References**
+
+- [`references/cinematic-image-direction.md`](../../../skills/scene-asset/references/cinematic-image-direction.md)
+- [`references/NEGATIVE-CASE-BOOK.md`](../../../skills/scene-asset/references/NEGATIVE-CASE-BOOK.md)
+- [`references/scene-multiview-design.md`](../../../skills/scene-asset/references/scene-multiview-design.md)
+
+**Distribution notices in new ZIP builds**
+
+New builds attach these files inside the Skill folder without editing its runtime source. Historical release archives are unchanged.
+
+- [`LICENSE`](../../../LICENSE)

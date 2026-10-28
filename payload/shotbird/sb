@@ -1,0 +1,3 @@
+#!/bin/sh
+# One-word wrapper so agents can use SB="$HOME/.claude/skills/shotbird/sb" in any shell (zsh does not word-split variables).
+exec /usr/bin/python3 -I "$HOME/.claude/skills/shotbird/sb.py" "$@"
