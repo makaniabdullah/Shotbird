@@ -5,3 +5,6 @@ __pycache__/
 .share.json
 .config.json
 .server.*
+.tunnel*
+.pages*
+bin/

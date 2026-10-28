@@ -139,6 +139,26 @@ def token_name(cfg, tok):
         return None
 
 
+def tunnel_url():
+    """The public Cloudflare link while `launch.sh tunnel` is running, else None."""
+    try:
+        pid = int(open(os.path.join(ROOT, ".tunnel.pid")).read().strip())
+        os.kill(pid, 0)
+        return open(os.path.join(ROOT, ".tunnel-url")).read().strip() or None
+    except (OSError, ValueError):
+        return None
+
+
+def pages_url():
+    """The fixed GitHub Pages team link that forwards to the tunnel (`launch.sh pages`), when it's on."""
+    try:
+        if os.path.exists(os.path.join(ROOT, ".pages.on")):
+            return json.load(open(os.path.join(ROOT, ".pages.json"), encoding="utf-8")).get("url") or None
+    except (OSError, ValueError):
+        pass
+    return None
+
+
 def lan_urls(port):
     """Addresses teammates can open: this Mac's network name (Bonjour) and its current IP."""
     out = []
@@ -731,9 +751,21 @@ class H(BaseHTTPRequestHandler):
             return None
 
     # who is asking -------------------------------------------------------------------------
+    RELAY = ("X-Forwarded-For", "Forwarded", "X-Real-Ip", "Cf-Connecting-Ip", "Cf-Ray", "X-Forwarded-Proto")
+
     def local(self):
-        """True for requests from this Mac (the Shotbird app, a browser here, headless Chrome printing a PDF)."""
-        return self.client_address[0] in LOCAL
+        """True for requests made on this Mac itself (the Shotbird app, a browser here, headless Chrome printing a
+        PDF). A tunnel or proxy also connects from this Mac, but it adds forwarding headers: those requests come from
+        someone else, so they count as a teammate who must sign in."""
+        return self.client_address[0] in LOCAL and not any(self.headers.get(h) for h in self.RELAY)
+
+    def peer(self):
+        """The visitor's address, looking through a tunnel on this Mac (used to lock out password guessing)."""
+        if self.client_address[0] in LOCAL:
+            fwd = self.headers.get("Cf-Connecting-Ip") or (self.headers.get("X-Forwarded-For") or "").split(",")[0].strip()
+            if fwd:
+                return fwd
+        return self.client_address[0]
 
     def who(self):
         """This Mac's owner, a signed-in teammate's name, or None."""
@@ -765,12 +797,13 @@ class H(BaseHTTPRequestHandler):
         self.send_header("Content-Type", "application/json; charset=utf-8")
         self.send_header("Content-Length", str(len(payload)))
         self.send_header("Cache-Control", "no-store")
-        self.send_header("Set-Cookie", "sb_auth=%s; Path=/; HttpOnly; SameSite=Lax; Max-Age=%d" % (value, max_age))
+        secure = "; Secure" if (self.headers.get("X-Forwarded-Proto") or "").lower() == "https" else ""  # via an HTTPS tunnel
+        self.send_header("Set-Cookie", "sb_auth=%s; Path=/; HttpOnly; SameSite=Lax; Max-Age=%d%s" % (value, max_age, secure))
         self.end_headers()
         self.wfile.write(payload)
 
     def login(self, body):
-        cfg, ip = share_cfg(), self.client_address[0]
+        cfg, ip = share_cfg(), self.peer()
         if not cfg:
             return self.send(403, {"error": "Sharing is off on this Mac."})
         with FAILS_LOCK:
@@ -805,7 +838,11 @@ class H(BaseHTTPRequestHandler):
             self.end_headers()
             return
         if path == "/api/me":
-            return self.send(200, {"name": self.who(), "local": self.local(), "sharing": bool(share_cfg())})
+            me = {"name": self.who(), "local": self.local(), "sharing": bool(share_cfg())}
+            if me["local"]:  # only this Mac's owner gets the links to hand out
+                me.update(tunnel=tunnel_url(), lan=lan_urls(PORT) if me["sharing"] else [])
+                me["pages"] = pages_url() if me["tunnel"] else None
+            return self.send(200, me)
         if path in ("/", "/index.html"):
             return self.file(os.path.join(BOARD, "index.html"))
         if path == "/print":

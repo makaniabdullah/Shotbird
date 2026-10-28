@@ -709,7 +709,9 @@ function applyTheme(t){ const d=t==='dark'||(t==='system'&&matchMedia('(prefers-
   document.documentElement.dataset.theme=t; document.documentElement.dataset.mode=d?'dark':'light'; }
 matchMedia('(prefers-color-scheme: dark)').addEventListener('change',()=>applyTheme(themeNow()));
 function cycleTheme(){ const n={system:'light',light:'dark',dark:'system'}[themeNow()]||'system'; try{localStorage.setItem('sb-theme',n)}catch(e){} applyTheme(n); topSig=''; topbar(); toast(`Theme: ${cap(n)}`, n==='dark'?'moon':n==='light'?'sun':'monitor'); }
-const meBtn = () => ME.local ? '' : `<a class="btn ghost sm" href="/logout" title="Signed in as ${esc(ME.name)} · Sign out">${ic('user-round')}<span class="lbl">${esc(ME.name)}</span></a>`;
+// the owner gets a Team link button (the internet link while the tunnel is on, else the office-network one)
+const teamLink = () => ME.pages || ME.tunnel || (ME.lan||[])[0] || '';  // the fixed GitHub link first: it always forwards to the tunnel
+const meBtn = () => ME.local ? (teamLink() ? `<button class="btn ghost sm" data-act="teamlink" title="Copy the link teammates open: ${esc(teamLink())}">${ic('copy')}<span class="lbl">Team link</span></button>` : '') : `<a class="btn ghost sm" href="/logout" title="Signed in as ${esc(ME.name)} · Sign out">${ic('user-round')}<span class="lbl">${esc(ME.name)}</span></a>`;
 const themeBtn = () => { const t=themeNow(); return `<button class="ibtn" data-act="theme" title="Theme: ${cap(t)}" aria-label="Theme">${ic(t==='dark'?'moon':t==='light'?'sun':'monitor')}</button>`; };
 
 /* ---------- top bar ---------- */
@@ -1468,6 +1470,7 @@ document.addEventListener('click', async e=>{
     case 'drawer-close': closeDrawer(); break;
     case 'skill': { const c=CREW.find(x=>x.id===d.id); if(c&&c.card) openSheet({type:'doc', title:`${cap(d.id)} · skill card`, html:md(c.card)}); break; }
     case 'chat': toggleChat(d.open==='1'); break;
+    case 'teamlink': copyText(teamLink(), ME.pages?'Team link copied: it never changes':ME.tunnel?'Team link copied (works from anywhere)':'Team link copied (office network)'); break;
     case 'copycmd': copyText('sh ~/.claude/skills/shotbird/login.sh', 'Command copied'); break;
   }
 });

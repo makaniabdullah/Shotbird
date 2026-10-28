@@ -4,15 +4,48 @@
 #   sh ~/.claude/skills/shotbird/launch.sh serve       start the server (if needed) and wait until it answers; no window
 #   sh ~/.claude/skills/shotbird/launch.sh stop        stop the server
 #   sh ~/.claude/skills/shotbird/launch.sh share       share it on the office network: set the team password, restart
-#   sh ~/.claude/skills/shotbird/launch.sh share off   back to this Mac only
+#   sh ~/.claude/skills/shotbird/launch.sh share off   back to this Mac only (also closes the internet link)
+#   sh ~/.claude/skills/shotbird/launch.sh tunnel      a public https link to this Mac (Cloudflare Quick Tunnel, free):
+#                                                      teammates anywhere sign in with the team password. It starts with
+#                                                      Shotbird from now on; the link changes when the tunnel restarts.
+#   sh ~/.claude/skills/shotbird/launch.sh tunnel off  close the internet link
+#   sh ~/.claude/skills/shotbird/launch.sh pages       a fixed team link on GitHub Pages that always forwards to the
+#                                                      current tunnel link (settings: ~/Shotbird/.pages.json; pages.sh)
+#   sh ~/.claude/skills/shotbird/launch.sh pages off   stop updating it (the page then says Shotbird is offline)
 HERE="$HOME/.claude/skills/shotbird"
 APP="$HOME/Applications/Shotbird.app"
 BASE="http://localhost:8777"
 LOG="$HOME/Shotbird/.server.log"
 PIDF="$HOME/Shotbird/.server.pid"
 SHARE="$HOME/Shotbird/.share.json"
+CFD="$HERE/bin/cloudflared"
+[ -x "$CFD" ] || for c in /opt/homebrew/bin/cloudflared /usr/local/bin/cloudflared; do [ -x "$c" ] && CFD="$c" && break; done
+TON="$HOME/Shotbird/.tunnel.on"
+TPID="$HOME/Shotbird/.tunnel.pid"
+TLOG="$HOME/Shotbird/.tunnel.log"
+TURL="$HOME/Shotbird/.tunnel-url"
+PON="$HOME/Shotbird/.pages.on"
+PLOG="$HOME/Shotbird/.pages.log"
+pages_push() { [ -f "$PON" ] && sh "$HERE/pages.sh" update "$1" >>"$PLOG" 2>&1; }  # the fixed GitHub link follows the tunnel
 up() { /usr/bin/curl -s -m 1 -o /dev/null "$BASE/api/status"; }
 sharing() { /usr/bin/grep -q '"enabled": true' "$SHARE" 2>/dev/null; }
+tunnel_up() { [ -f "$TPID" ] && kill -0 "$(cat "$TPID")" 2>/dev/null; }
+tunnel_start() {  # a Cloudflare Quick Tunnel to the board; it outlives server restarts, so the link stays the same
+  tunnel_up && return 0
+  [ -x "$CFD" ] || { echo "The tunnel program isn't installed: brew install cloudflared, or put it at $HERE/bin/cloudflared" >&2; return 1; }
+  rm -f "$TURL"
+  nohup "$CFD" tunnel --no-autoupdate --url http://127.0.0.1:8777 >"$TLOG" 2>&1 </dev/null &
+  echo $! >"$TPID"
+  i=0
+  while [ $i -lt 60 ]; do
+    U=$(/usr/bin/grep -oE 'https://[a-z0-9-]+\.trycloudflare\.com' "$TLOG" | /usr/bin/head -1)
+    [ -n "$U" ] && { echo "$U" >"$TURL"; pages_push "$U" & return 0; }
+    sleep 0.5; i=$((i + 1))
+  done
+  echo "The tunnel didn't come up. Details: $TLOG" >&2
+  return 1
+}
+tunnel_stop() { [ -f "$TPID" ] && kill "$(cat "$TPID")" 2>/dev/null; rm -f "$TPID" "$TURL"; }
 stop() {
   if [ -f "$PIDF" ] && kill "$(cat "$PIDF")" 2>/dev/null; then echo "Shotbird stopped."
   elif /usr/bin/pkill -f "$HERE/serve.py"; then echo "Shotbird stopped."
@@ -27,10 +60,43 @@ if [ "$1" = "stop" ]; then
   exit 0
 fi
 
+if [ "$1" = "tunnel" ]; then
+  if [ "$2" = "off" ]; then
+    rm -f "$TON"; tunnel_stop
+    pages_push off
+    echo "The internet link is closed. (Office-network sharing is unchanged.)"
+    exit 0
+  fi
+  sharing || { echo "Set a team password first: sh $HERE/launch.sh share" >&2; exit 1; }
+  sh "$HERE/launch.sh" serve || exit 1
+  touch "$TON"  # after serve, so serve's own auto-start doesn't race this one
+  tunnel_start || exit 1
+  echo "Shotbird is on the internet at:"
+  echo "  $(cat "$TURL")"
+  echo "Teammates sign in with their name and the team password. The link changes if the tunnel restarts"
+  echo "(after a reboot, for example); the board's Team link button always has the current one."
+  echo "Close it: sh $HERE/launch.sh tunnel off"
+  exit 0
+fi
+
+if [ "$1" = "pages" ]; then
+  if [ "$2" = "off" ]; then
+    pages_push off; rm -f "$PON"
+    echo "The GitHub team link no longer follows the tunnel (it now says Shotbird is offline)."
+    exit 0
+  fi
+  [ -f "$HOME/Shotbird/.pages.json" ] || { echo "Missing ~/Shotbird/.pages.json (repo and page address)." >&2; exit 1; }
+  touch "$PON"
+  if tunnel_up && [ -s "$TURL" ]; then sh "$HERE/pages.sh" update "$(cat "$TURL")" || exit 1
+  else sh "$HERE/pages.sh" update off || exit 1; fi
+  exit 0
+fi
+
 if [ "$1" = "share" ]; then
   mkdir -p "$HOME/Shotbird"
   if [ "$2" = "off" ]; then
     [ -f "$SHARE" ] && /usr/bin/sed -i '' 's/"enabled": true/"enabled": false/' "$SHARE"
+    rm -f "$TON"; tunnel_stop; pages_push off  # no password, no internet link
     stop >/dev/null
     sh "$HERE/launch.sh" serve && echo "Sharing is off: only this Mac can open Shotbird."
     exit 0
@@ -71,6 +137,8 @@ if ! up; then
   while ! up && [ $i -lt 50 ]; do sleep 0.2; i=$((i + 1)); done
   up || { echo "The Shotbird server didn't start. Details: $LOG" >&2; exit 1; }
 fi
+# The internet link, if it's on, comes back with Shotbird (at login, for example).
+if [ -f "$TON" ] && sharing && ! tunnel_up; then tunnel_start >/dev/null 2>&1 & fi
 
 [ "$1" = "serve" ] && exit 0
 

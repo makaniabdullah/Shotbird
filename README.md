@@ -60,6 +60,50 @@ sh ~/.claude/skills/shotbird/launch.sh share
 
 The crew runs on the host Mac and can run commands there, so only give the password to people you trust.
 
+## Open it to teammates anywhere
+
+Teammates outside the office can reach the same Mac over the internet through a free Cloudflare Quick Tunnel. It needs no account and no domain.
+
+1. Install Cloudflare's tunnel program once: `brew install cloudflared`. Or put the `cloudflared` binary at `~/.claude/skills/shotbird/bin/cloudflared`.
+2. Turn on sharing first (above), then run:
+
+   ```bash
+   sh ~/.claude/skills/shotbird/launch.sh tunnel
+   ```
+
+- **The link:** it prints a public `https://….trycloudflare.com` link. Teammates sign in there with their name and the team password, as on the office network.
+- **Lockout:** five wrong passwords lock that visitor out for a minute.
+- **Restarts:** the tunnel comes back with Shotbird, at login for example. Its link changes whenever it restarts.
+- **Team link button:** the button in the board's top bar always copies the current link.
+- **Turning it off:**
+
+  ```bash
+  sh ~/.claude/skills/shotbird/launch.sh tunnel off
+  ```
+
+### A team link that never changes
+
+To avoid resending the link after every restart, publish a small GitHub Pages page that always forwards to the current tunnel:
+
+1. Have a GitHub repository you can push to from this Mac, with your GitHub sign-in saved in the keychain (a normal `git push` works without asking).
+2. Create `~/Shotbird/.pages.json`:
+
+   ```json
+   {"repo": "https://github.com/<you>/<repo>.git", "url": "https://<you>.github.io/<repo>/"}
+   ```
+
+3. Run:
+
+   ```bash
+   sh ~/.claude/skills/shotbird/launch.sh pages
+   ```
+
+- **How it updates:** Shotbird force-pushes a one-page `gh-pages` branch whenever the tunnel's link changes. GitHub Pages serves it at the `url` above, and the Team link button copies that address instead.
+- **When it's off:** with the tunnel or sharing off, the page says Shotbird is offline.
+- **Stopping it:** `launch.sh pages off`.
+
+Anyone who can read the repository can see the current tunnel link on the `gh-pages` branch. The team password still protects it.
+
 ## Where things go
 
 | Path | What |
