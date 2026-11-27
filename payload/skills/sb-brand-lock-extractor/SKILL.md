@@ -3,7 +3,7 @@ name: sb-brand-lock-extractor
 description: "Shotbird crew skill (Scout): turn a brand book PDF, URL or screenshots into a film-ready brand lock (palette hex by role, type, mood, never-list, aspect ratios, colour-grade direction, motion language), with every value marked extracted, inferred or needs-confirmation. Use inside Shotbird runs. Its optional validators are not installed."
 ---
 
-> **Shotbird install note.** Installed for Abdullah's Shotbird crew from a pinned GitHub commit (see ATTRIBUTION.md). Only Markdown and data were installed: skip any step that runs a script, installs software, needs an API key, uploads media to third-party sites or writes to a local database. Abdullah's house rules (Obsidian vault playbooks and the agent's own instructions) take precedence over this skill.
+> **Shotbird install note.** Installed for {{NAME}}'s Shotbird crew from a pinned GitHub commit (see ATTRIBUTION.md). Only Markdown and data were installed: skip any step that runs a script, installs software, needs an API key, uploads media to third-party sites or writes to a local database. {{NAME}}'s house rules (Obsidian vault playbooks and the agent's own instructions) take precedence over this skill.
 
 > **Shotbird paths.** The blank brand pack is at `brand-packs/_template.md` in this folder, with a worked example at `brand-packs/example-saas-clean.md`. The lock template is at `templates/brand-lock.md.txt`. Wherever the text below says `~/.claude/shotkit-brand-packs/` or `~/.claude/shotkit-tools/`, use these paths instead. The validators are not installed; check the nine sections by hand. Shotbird's output goes to `01-scout/brand.json` plus `01-scout/brand-lock.md`.
 

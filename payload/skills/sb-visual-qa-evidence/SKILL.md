@@ -3,7 +3,7 @@ name: sb-visual-qa-evidence
 description: "Shotbird crew skill (Hawk): evidence-backed visual QA: PASS/FAIL/UNVERIFIED tables, letter-by-letter text verification, brand-contract checks (logo integrity, colour roles) and the smallest single edit that fixes a failure. Use inside Shotbird runs. Its probe and compare scripts are not installed."
 ---
 
-> **Shotbird install note.** Installed for Abdullah's Shotbird crew from a pinned GitHub commit (see ATTRIBUTION.md). Only Markdown and data were installed: skip any step that runs a script, installs software, needs an API key, uploads media to third-party sites or writes to a local database. Abdullah's house rules (Obsidian vault playbooks and the agent's own instructions) take precedence over this skill.
+> **Shotbird install note.** Installed for {{NAME}}'s Shotbird crew from a pinned GitHub commit (see ATTRIBUTION.md). Only Markdown and data were installed: skip any step that runs a script, installs software, needs an API key, uploads media to third-party sites or writes to a local database. {{NAME}}'s house rules (Obsidian vault playbooks and the agent's own instructions) take precedence over this skill.
 
 
 # Thalarch Visual QA

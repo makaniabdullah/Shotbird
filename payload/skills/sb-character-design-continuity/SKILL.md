@@ -3,7 +3,7 @@ name: sb-character-design-continuity
 description: "Shotbird crew skill (Hatch, Hawk): character bible layer: Locked, Flexible and Story-changing tolerance tables, a negative-identity list of common model confusions, silhouette and shape language, a do-not-generate sheet, and a likeness and age rights gate. Use inside Shotbird runs."
 ---
 
-> **Shotbird install note.** Installed for Abdullah's Shotbird crew from a pinned GitHub commit (see ATTRIBUTION.md). Only Markdown and data were installed: skip any step that runs a script, installs software, needs an API key, uploads media to third-party sites or writes to a local database. Abdullah's house rules (Obsidian vault playbooks and the agent's own instructions) take precedence over this skill.
+> **Shotbird install note.** Installed for {{NAME}}'s Shotbird crew from a pinned GitHub commit (see ATTRIBUTION.md). Only Markdown and data were installed: skip any step that runs a script, installs software, needs an API key, uploads media to third-party sites or writes to a local database. {{NAME}}'s house rules (Obsidian vault playbooks and the agent's own instructions) take precedence over this skill.
 
 
 # Character Design Continuity

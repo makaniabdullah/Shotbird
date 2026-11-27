@@ -3,7 +3,7 @@ name: sb-wan-3-prompting
 description: "Shotbird crew skill (Cue): Wan 3.0 image-to-video prompting rules. Use inside Shotbird runs when Wan is the target engine."
 ---
 
-> **Shotbird install note.** Installed for Abdullah's Shotbird crew from a pinned GitHub commit (see ATTRIBUTION.md). Only Markdown and data were installed: skip any step that runs a script, installs software, needs an API key, uploads media to third-party sites or writes to a local database. Abdullah's house rules (Obsidian vault playbooks and the agent's own instructions) take precedence over this skill.
+> **Shotbird install note.** Installed for {{NAME}}'s Shotbird crew from a pinned GitHub commit (see ATTRIBUTION.md). Only Markdown and data were installed: skip any step that runs a script, installs software, needs an API key, uploads media to third-party sites or writes to a local database. {{NAME}}'s house rules (Obsidian vault playbooks and the agent's own instructions) take precedence over this skill.
 
 
 # Wan 3.0 prompting

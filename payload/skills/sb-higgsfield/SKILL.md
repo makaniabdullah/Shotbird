@@ -10,7 +10,7 @@ metadata:
   license: MIT
 ---
 
-> **Shotbird install note.** Installed for Abdullah's Shotbird crew from a pinned GitHub commit (see ATTRIBUTION.md). Scripts, databases, CI and settings files were not installed: skip any step that runs a script, installs software, uploads media to third-party sites or writes to a local database. Shotbird logs work through `sb.py` and each agent's memory. Abdullah's house rules (Obsidian vault playbooks and the agent's own instructions) take precedence over this skill.
+> **Shotbird install note.** Installed for {{NAME}}'s Shotbird crew from a pinned GitHub commit (see ATTRIBUTION.md). Scripts, databases, CI and settings files were not installed: skip any step that runs a script, installs software, uploads media to third-party sites or writes to a local database. Shotbird logs work through `sb.py` and each agent's memory. {{NAME}}'s house rules (Obsidian vault playbooks and the agent's own instructions) take precedence over this skill.
 
 
 # Higgsfield AI Prompt Skill

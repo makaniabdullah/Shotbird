@@ -8,7 +8,7 @@ metadata:
   author: "wangzhang-wu"
 ---
 
-> **Shotbird install note.** Installed for Abdullah's Shotbird crew from a pinned GitHub commit (see ATTRIBUTION.md). Only Markdown and data were installed: skip any step that runs a script, installs software, needs an API key, uploads media to third-party sites or writes to a local database. Abdullah's house rules (Obsidian vault playbooks and the agent's own instructions) take precedence over this skill.
+> **Shotbird install note.** Installed for {{NAME}}'s Shotbird crew from a pinned GitHub commit (see ATTRIBUTION.md). Only Markdown and data were installed: skip any step that runs a script, installs software, needs an API key, uploads media to third-party sites or writes to a local database. {{NAME}}'s house rules (Obsidian vault playbooks and the agent's own instructions) take precedence over this skill.
 
 
 # Cinematic Director Skill
@@ -128,7 +128,7 @@ Defaults when unspecified:
 1. **Story function first.** A shot with no story function is deleted, not improved.
 2. **Blocking before framing.** Decide what bodies do in space, then place the camera. A well-blocked scene reads even shot flat.
 3. **One dominant camera move and one primary action per clip.** No move at all is a legitimate choice and often the better one. Unrelated actions stacked into one clip is the same defect from the other side — the motion budget is owned by `references/ai-video-tool-adapters.md`.
-4. **Every action has an end state.** "He turns" is not a shot. "He turns until his profile is against the window, then stops" is.
+4. **Every action has an end state.** "He turns" is not a shot. "He turns until their profile is against the window, then stops" is.
 5. **Behavior, not emotion.** Never prompt "he is afraid." Prompt what fear looks like on a body.
 6. **Continuity is engineered.** Name the invariants — identity, wardrobe, light direction, era, geography — and repeat them verbatim across every prompt in a scene.
 7. **The keyframe is the control point.** A video model mostly re-animates what the still already decided. Fix the still before spending video generations.
@@ -381,9 +381,9 @@ Good:
 ```text
 Low-angle medium close shot, locked camera with a very slow push-in, no other movement. The man starts
 on one knee in the muddy rain-soaked street, one hand pressed flat against the wet ground. He breathes
-heavily, then slowly lifts his head just far enough for his wet hair to fall aside and reveal one tired
-eye. Rain keeps breaking the surface of the puddles around his robe; distant lightning briefly lifts the
-far end of the empty street. End with him half-raised and still unsteady, weight on the forward knee,
+heavily, then slowly lifts their head just far enough for their wet hair to fall aside and reveal one tired
+eye. Rain keeps breaking the surface of the puddles around their robe; distant lightning briefly lifts the
+far end of the empty street. End with them half-raised and still unsteady, weight on the forward knee,
 head up. Maintain the same face, wet hair, crimson robe, stormy old Chinese street, low-key practical
 lighting from a single lantern camera-left. No text, no watermark, no extra people, no plastic, no
 rubber soles, no wristwatch, no printed logos.
@@ -392,7 +392,7 @@ rubber soles, no wristwatch, no printed logos.
 Bad:
 
 ```text
-Cinematic dark horror atmosphere, the man struggles in the rain and remembers his past, dramatic camera,
+Cinematic dark horror atmosphere, the man struggles in the rain and remembers their past, dramatic camera,
 emotional, high quality, masterpiece.
 ```
 

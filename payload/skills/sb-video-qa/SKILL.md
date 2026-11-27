@@ -3,7 +3,7 @@ name: sb-video-qa
 description: "Shotbird crew skill (Hawk): QC rubric for AI-generated visuals: weighted categories, severity ladders, evidence rules and Block/Pass verdicts, with candour about what an LLM can't detect. Use inside Shotbird runs when reviewing frames."
 ---
 
-> **Shotbird install note.** Installed for Abdullah's Shotbird crew from a pinned GitHub commit (see ATTRIBUTION.md). Scripts, databases, CI and settings files were not installed: skip any step that runs a script, installs software, uploads media to third-party sites or writes to a local database. Shotbird logs work through `sb.py` and each agent's memory. Abdullah's house rules (Obsidian vault playbooks and the agent's own instructions) take precedence over this skill.
+> **Shotbird install note.** Installed for {{NAME}}'s Shotbird crew from a pinned GitHub commit (see ATTRIBUTION.md). Scripts, databases, CI and settings files were not installed: skip any step that runs a script, installs software, uploads media to third-party sites or writes to a local database. Shotbird logs work through `sb.py` and each agent's memory. {{NAME}}'s house rules (Obsidian vault playbooks and the agent's own instructions) take precedence over this skill.
 
 
 # Video QA — Quality Control for AI Video Projects
@@ -45,7 +45,7 @@ The default QC methodology is **multi-frame extraction at 1 fps via ffmpeg.** Fo
 
 ### Prerequisite — frames (Shotbird)
 
-Shotbird's Hawk reviews **still storyboard frames** that are already local PNGs in the project, so no extraction is needed. If a video clip must be reviewed and `ffmpeg` is missing, do not install software and never upload media to third-party websites. Use macOS Quick Look (`qlmanage -t -s 1280 -o <out> <clip>.mp4`) for a single representative frame, or ask Abdullah to export stills from his NLE. Record which method was used in the QC log.
+Shotbird's Hawk reviews **still storyboard frames** that are already local PNGs in the project, so no extraction is needed. If a video clip must be reviewed and `ffmpeg` is missing, do not install software and never upload media to third-party websites. Use macOS Quick Look (`qlmanage -t -s 1280 -o <out> <clip>.mp4`) for a single representative frame, or ask {{NAME}} to export stills from their NLE. Record which method was used in the QC log.
 
 ### The canonical extraction command
 

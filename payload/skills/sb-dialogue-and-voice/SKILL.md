@@ -3,7 +3,7 @@ name: sb-dialogue-and-voice
 description: "Shotbird crew skill (Cue): dialogue lines and voice in video prompts: punctuation rules, causes of lip-sync failure, and speaker tagging. Use inside Shotbird runs for any shot with speech."
 ---
 
-> **Shotbird install note.** Installed for Abdullah's Shotbird crew from a pinned GitHub commit (see ATTRIBUTION.md). Only Markdown and data were installed: skip any step that runs a script, installs software, needs an API key, uploads media to third-party sites or writes to a local database. Abdullah's house rules (Obsidian vault playbooks and the agent's own instructions) take precedence over this skill.
+> **Shotbird install note.** Installed for {{NAME}}'s Shotbird crew from a pinned GitHub commit (see ATTRIBUTION.md). Only Markdown and data were installed: skip any step that runs a script, installs software, needs an API key, uploads media to third-party sites or writes to a local database. {{NAME}}'s house rules (Obsidian vault playbooks and the agent's own instructions) take precedence over this skill.
 
 
 # Dialogue, voice and audio
@@ -180,7 +180,7 @@ Speech cues are the primary trigger for **both** unwanted audio and burned-in ca
 To get a genuinely silent clip:
 
 - Remove every quoted line and every speech cue.
-- **Never mention the mouth, lips or speaking** — "his mouth opens slightly as if about
+- **Never mention the mouth, lips or speaking** — "their mouth opens slightly as if about
   to speak" and "lips press together" both generate actual speech. Convey emotion through
   eyebrows, jaw and eyes only.
 - State the silence positively and explicitly:

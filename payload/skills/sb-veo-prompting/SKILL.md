@@ -3,7 +3,7 @@ name: sb-veo-prompting
 description: "Shotbird crew skill (Cue): field-tested Veo 3.1 prompting rules, each tagged as Google-sourced or practitioner estimate, plus a silent-clip recipe. Written for Google Flow; on Higgsfield, check the model's real parameters. Use inside Shotbird runs."
 ---
 
-> **Shotbird install note.** Installed for Abdullah's Shotbird crew from a pinned GitHub commit (see ATTRIBUTION.md). Only Markdown and data were installed: skip any step that runs a script, installs software, needs an API key, uploads media to third-party sites or writes to a local database. Abdullah's house rules (Obsidian vault playbooks and the agent's own instructions) take precedence over this skill.
+> **Shotbird install note.** Installed for {{NAME}}'s Shotbird crew from a pinned GitHub commit (see ATTRIBUTION.md). Only Markdown and data were installed: skip any step that runs a script, installs software, needs an API key, uploads media to third-party sites or writes to a local database. {{NAME}}'s house rules (Obsidian vault playbooks and the agent's own instructions) take precedence over this skill.
 
 
 # Veo 3.1 / Gemini Omni Flash prompting
@@ -109,7 +109,7 @@ for intensity · wide-angle for establishers `[ESTIMATE]`.
   the ambient audio, then add `no dialogue, no speech, silent`. Speech cues are the
   primary trigger for both spoken audio **and** burned-in captions `[FACT]`. Flow also
   has an explicit toggle: View Settings → **Return silent videos: On**.
-  **Never mention the mouth, lips or speaking in a silent clip** — "his mouth opens
+  **Never mention the mouth, lips or speaking in a silent clip** — "their mouth opens
   slightly as if about to speak" reliably generates actual speech. Emotion goes through
   eyebrows, jaw and eyes.
 - Audio is **always generated** and there is no mute flag `[FACT]` — so direct it per

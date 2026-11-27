@@ -3,7 +3,7 @@ name: sb-lighting-direction
 description: "Shotbird crew skill (Slate, Hatch): gaffer-grade lighting direction: motivation leading to key, fill, rim and practicals; hard and soft light; Kelvin paired with perceived colour; ratios and falloff; a per-scene lighting bible that holds source direction across coverage. Use inside Shotbird runs."
 ---
 
-> **Shotbird install note.** Installed for Abdullah's Shotbird crew from a pinned GitHub commit (see ATTRIBUTION.md). Only Markdown and data were installed: skip any step that runs a script, installs software, needs an API key, uploads media to third-party sites or writes to a local database. Abdullah's house rules (Obsidian vault playbooks and the agent's own instructions) take precedence over this skill.
+> **Shotbird install note.** Installed for {{NAME}}'s Shotbird crew from a pinned GitHub commit (see ATTRIBUTION.md). Only Markdown and data were installed: skip any step that runs a script, installs software, needs an API key, uploads media to third-party sites or writes to a local database. {{NAME}}'s house rules (Obsidian vault playbooks and the agent's own instructions) take precedence over this skill.
 
 
 # Lighting direction for generated media

@@ -9,7 +9,7 @@ eval_score: 4.4
 tags: [screenwriting, development, treatment, feature-film, TV-pilot]
 ---
 
-> **Shotbird install note.** Installed for Abdullah's Shotbird crew from a pinned GitHub commit (see ATTRIBUTION.md). Only Markdown and data were installed: skip any step that runs a script, installs software, needs an API key, uploads media to third-party sites or writes to a local database. Abdullah's house rules (Obsidian vault playbooks and the agent's own instructions) take precedence over this skill.
+> **Shotbird install note.** Installed for {{NAME}}'s Shotbird crew from a pinned GitHub commit (see ATTRIBUTION.md). Only Markdown and data were installed: skip any step that runs a script, installs software, needs an API key, uploads media to third-party sites or writes to a local database. {{NAME}}'s house rules (Obsidian vault playbooks and the agent's own instructions) take precedence over this skill.
 
 # Treatment Writer
 
@@ -49,9 +49,9 @@ Present-tense prose throughout. Structured as: **Title Block** (title, format, d
 ### Input
 **Title:** COLD GROUND
 **Format:** Feature film
-**Logline:** A grief counselor who has never processed her own husband's suicide takes a remote posting in a rural mining community — and is assigned to the widow of the man who found him.
+**Logline:** A grief counselor who has never processed her own husband's suicide takes a remote posting in a rural mining community — and is assigned to the widow of the man who found them.
 **Protagonist:** Dr. Maren Voss, 41, grief counselor. Competent, admired, emotionally walled-off. Moved three times in five years.
-**Other major characters:** Diane Pell, 56, the widow — direct, unsentimental, the only person in the film who says exactly what she means. Sheriff Boyd, 60, who knew Maren's husband and has been waiting for her to ask him what he knows.
+**Other major characters:** Diane Pell, 56, the widow — direct, unsentimental, the only person in the film who says exactly what she means. Sheriff Boyd, 60, who knew Maren's husband and has been waiting for her to ask them what he knows.
 **Theme:** We cannot help others grieve what we haven't allowed ourselves to lose.
 **Tone:** Quiet, wintry, emotionally devastating. References: Manchester by the Sea, Frozen River.
 **Act structure:**
@@ -94,17 +94,17 @@ Harlan is a copper-mining town in the high country, three hours from the nearest
 
 Maren arrives in Harlan on a Sunday afternoon in November. The clinic is in a converted hardware store. Her supervisor, a tired man named Doherty, hands her a caseload of eleven clients and tells her there is a waiting list. She begins work the following morning.
 
-She is exceptional. Within six weeks she has stabilized three clients, referred two for medication review, and developed genuine trust with a young man dealing with the death of his mother. She lives in a rented room above the hardware store. She does not learn the names of her neighbors.
+She is exceptional. Within six weeks she has stabilized three clients, referred two for medication review, and developed genuine trust with a young man dealing with the death of their mother. She lives in a rented room above the hardware store. She does not learn the names of her neighbors.
 
 In week seven, Diane Pell arrives for their first session, referred following a twelve-month wait. The session goes wrong immediately. Diane does not answer questions about Frank. She asks Maren a question instead: *"Is this helping you? Because it isn't helping me."* Maren redirects. Diane comes back the following week and asks a different question. Maren realizes, slowly, that she is being treated.
 
 The sessions with Diane become the center of the film. Diane is not cruel and she is not performing insight. She is simply unwilling to perform a grief she doesn't feel for the benefit of a system that wants her to feel it. In refusing, she names the thing Maren has been doing for four years. Maren begins, slowly, to come apart at the professional seams.
 
-In the third month, Maren sees Boyd's name on a sign at the sheriff's office. She has heard it before, in a context she cannot place. She asks Doherty. Doherty says only that Boyd is a solid man who has worked the high country his whole life. That night, Maren calls her sister for the first time in fourteen months and asks whether she knows a Sheriff Boyd Cutter in Harlan. There is a pause on the line.
+In the third month, Maren sees Boyd's name on a sign at the sheriff's office. She has heard it before, in a context she cannot place. She asks Doherty. Doherty says only that Boyd is a solid man who has worked the high country their whole life. That night, Maren calls her sister for the first time in fourteen months and asks whether she knows a Sheriff Boyd Cutter in Harlan. There is a pause on the line.
 
-Boyd comes to her. He explains, quietly, that he was the first responder at her husband's death and that in the hours following, still in shock, she had asked him not to share any details of the scene with her — not then, not later. He had honored that. She looks at him for a long time. She asks him to tell her everything now.
+Boyd comes to her. He explains, quietly, that he was the first responder at her husband's death and that in the hours following, still in shock, she had asked them not to share any details of the scene with her — not then, not later. He had honored that. She looks at them for a long time. She asks them to tell her everything now.
 
-The truth Boyd knows is not dramatic. Her husband did not leave a note. He left a voicemail on Maren's phone — recorded thirty minutes before his death — that she never retrieved. It expires after thirty days. It has long since been deleted from the network. But the phone still exists, in a box in a storage unit in the city, and it was never reset. The voicemail may still be in the phone's local memory.
+The truth Boyd knows is not dramatic. Her husband did not leave a note. He left a voicemail on Maren's phone — recorded thirty minutes before their death — that she never retrieved. It expires after thirty days. It has long since been deleted from the network. But the phone still exists, in a box in a storage unit in the city, and it was never reset. The voicemail may still be in the phone's local memory.
 
 Maren drives to the city over a single weekend. She finds the phone. The voicemail is there.
 

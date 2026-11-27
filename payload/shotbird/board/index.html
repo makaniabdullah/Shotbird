@@ -90,6 +90,8 @@ body.scrolled .steps{box-shadow:0 12px 28px -18px rgba(0,0,0,.55)}
 .btn.acc:hover{filter:brightness(1.05);background:var(--accent)}
 .btn.dark{background:var(--text);border-color:var(--text);color:var(--bg)}
 .btn.dark:hover{background:var(--text);opacity:.9}
+.btn.danger{background:var(--bad);border-color:var(--bad);color:#fff}
+.btn.danger:hover{background:var(--bad);filter:brightness(1.07)}
 .btn.ghost{background:none;border-color:transparent;box-shadow:none;color:var(--muted)}
 .btn.ghost:hover{background:var(--hover);color:var(--text)}
 .btn.sm{height:30px;padding:0 10px;font-size:12.5px;border-radius:9px}
@@ -120,6 +122,7 @@ select.sel:focus{outline:none;border-color:var(--accent-line);box-shadow:0 0 0 3
 .brand{display:flex;align-items:center;gap:9px;font:600 18px/1 var(--display);letter-spacing:-.03em;flex:none}
 .mark{width:28px;height:28px;border-radius:8px;background:var(--accent);color:var(--accent-ink);display:grid;place-items:center;flex:none}
 .mark .i{width:17px;height:17px}
+.homeb{flex:none;margin-right:2px}@media (max-width:720px){.homeb .lbl{display:none}}
 .crumb{display:flex;align-items:center;gap:8px;min-width:0;font-size:13.5px;color:var(--muted)}
 .crumb a:hover{color:var(--text)}
 .crumb .sl{color:var(--line-2);font-size:18px;font-weight:300}
@@ -242,36 +245,18 @@ body.proj .md h2{scroll-margin-top:104px}
 .creq b .i{width:13px;height:13px}
 .creq.done{background:var(--ok-soft)} .creq.done b{color:var(--ok)}
 
-/* ---------- steps ---------- */
-.steps{padding-inline:8px!important;margin-inline:-8px;position:sticky;top:56px;z-index:12;background:var(--glass);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);display:flex;gap:6px;padding:14px 0 12px;overflow-x:auto;scrollbar-width:none;border-bottom:1px solid var(--line)}
+/* ---------- steps: a slim tab row ---------- */
+.steps{padding-inline:8px!important;margin-inline:-8px;position:sticky;top:56px;z-index:12;background:var(--glass);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);display:flex;gap:2px;padding:10px 0 0;overflow-x:auto;scrollbar-width:none;border-bottom:1px solid var(--line)}
 .steps::-webkit-scrollbar{display:none}
-.step{flex:1 1 0;min-width:0;display:flex;align-items:center;gap:11px;padding:8px 12px 8px 8px;border-radius:13px;border:0;background:none;text-align:left;transition:background .15s}
-.step:hover{background:var(--hover)}
-.step.on{background:var(--surface);box-shadow:var(--shadow-sm),0 0 0 1px var(--line)}
-.step .ico{width:34px;height:34px;border-radius:10px;display:grid;place-items:center;background:var(--surface-2);color:var(--muted);flex:none;position:relative;transition:all .2s}
-.step .ico>.i{width:17px;height:17px}
-.step.on .ico,.step.working .ico{color:var(--c);background:color-mix(in srgb,var(--c) 13%,transparent)}
-.step .bdg{position:absolute;right:-4px;bottom:-4px;width:16px;height:16px;border-radius:50%;display:grid;place-items:center;border:2px solid var(--bg);color:#fff}
-.step.on .bdg{border-color:var(--solid)}
-.step .bdg .i{width:9px;height:9px}
-.step .bdg.done{background:var(--ok)} .step .bdg.working{background:var(--accent);animation:pulse 1.1s infinite} .step .bdg.waiting{background:var(--warn)} .step .bdg.error{background:var(--bad)}
-.step .tx{min-width:0;overflow:hidden}
-.step .tx b{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-@media (max-width:1320px){.step{gap:9px;padding:7px 8px 7px 7px}.step .ico{width:30px;height:30px}}
-@media (max-width:1180px) and (min-width:1024px){.step .tx small{display:none}}
-.step .tx b{display:block;font-size:13.5px;font-weight:600;letter-spacing:-.005em}
-.step .tx small{display:block;font-size:12px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.step.working .tx small{color:var(--accent)}
-/* working agent: a light runs around the box's stroke, with a soft breathing glow */
-@property --ang{syntax:'<angle>';initial-value:0deg;inherits:false}
-.step{position:relative;isolation:isolate}
-.step.working{background:var(--surface)}
-.step.working::before{content:"";position:absolute;inset:0;border-radius:inherit;padding:1.5px;pointer-events:none;
-  background:conic-gradient(from var(--ang),transparent 0 52%,color-mix(in srgb,var(--c) 35%,transparent) 64%,var(--c) 80%,#fff 84%,var(--c) 88%,transparent 100%);
-  -webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask-composite:exclude;animation:sbspin 2.4s linear infinite}
-.step.working::after{content:"";position:absolute;inset:0;border-radius:inherit;z-index:-1;pointer-events:none;
-  box-shadow:0 0 0 1px color-mix(in srgb,var(--c) 40%,transparent),0 0 22px -4px color-mix(in srgb,var(--c) 70%,transparent);animation:sbglow 1.8s ease-in-out infinite}
-@keyframes sbspin{to{--ang:360deg}}
+.step{flex:none;display:inline-flex;align-items:center;gap:8px;height:42px;padding:0 14px;border:0;background:none;border-radius:10px 10px 0 0;position:relative;color:var(--muted);font-size:13.5px;font-weight:500;white-space:nowrap;transition:color .15s,background .15s}
+.step:hover{color:var(--text);background:var(--hover)}
+.step.on{color:var(--text)}
+.step.on::after{content:"";position:absolute;left:12px;right:12px;bottom:-1px;height:2px;border-radius:2px;background:var(--accent)}
+.step .sd{width:7px;height:7px;border-radius:50%;background:var(--line-2);flex:none}
+.step.done .sd{background:var(--ok)} .step.working .sd{background:var(--accent);animation:pulse 1.1s ease-in-out infinite} .step.waiting .sd{background:var(--warn)} .step.error .sd{background:var(--bad)}
+.step small{font-size:12px;font-weight:400;color:var(--faint)}
+.step.working small{color:var(--accent)} .step.waiting small{color:var(--warn)} .step.error small{color:var(--bad)}
+@media (max-width:1180px){.step small{display:none}}
 @keyframes sbglow{50%{opacity:.4}}
 .agrow.working .ic{box-shadow:0 0 0 1.5px var(--c),0 0 16px -2px var(--c);animation:sbglow 1.8s ease-in-out infinite}
 
@@ -558,6 +543,8 @@ pre.raw{white-space:pre-wrap;word-break:break-word;background:var(--surface-2);b
 .dlg>p{margin:0 0 16px;color:var(--muted);font-size:13.5px}
 .dlg textarea{width:100%;min-height:116px;border:1px solid var(--line-2);border-radius:13px;padding:11px 13px;font:14.5px/1.5 var(--sans);background:var(--surface-2);color:var(--text);resize:vertical;outline:0;transition:border-color .15s,box-shadow .15s}
 .dlg textarea:focus{border-color:var(--accent-line);box-shadow:0 0 0 4px var(--accent-soft)}
+.dlg input[type=text]{width:100%;height:44px;border:1px solid var(--line-2);border-radius:13px;padding:0 13px;font:14.5px var(--sans);background:var(--surface-2);color:var(--text);outline:0;transition:border-color .15s,box-shadow .15s}
+.dlg input[type=text]:focus{border-color:var(--accent-line);box-shadow:0 0 0 4px var(--accent-soft)}
 .dlg .sugg{margin:12px 0 0}
 .dlg .row{display:flex;align-items:center;gap:8px;margin-top:18px}
 .dlg .row .hint{font-size:12px;color:var(--faint);margin-right:auto}
@@ -607,10 +594,66 @@ pre.raw{white-space:pre-wrap;word-break:break-word;background:var(--surface-2);b
   .steps{top:56px}
 }
 @media (max-width:640px){.home h1{font-size:36px}.vh h1{font-size:24px}.lead{font-size:20px}.facts{grid-template-columns:1fr;gap:2px 0}.facts dd{margin-bottom:8px}}
+
+/* ---------- v3 (2026-11-25): calmer and simpler ---------- */
+:root{--r-lg:18px}
+:root[data-mode="dark"]{--surface:#0e0e10;--solid:#0e0e10;--glass:rgba(0,0,0,.72)}
+.aura{background:radial-gradient(70% 46% at 50% -12%,rgba(255,107,61,.2),transparent 70%),radial-gradient(40% 30% at 100% 100%,rgba(255,80,30,.07),transparent 70%)}
+.aura::after{display:none}
+:root[data-mode="dark"] #chat{background:#0a0a0c}
+:root[data-mode="dark"] .home .box{background:#0e0e10}
+.reveal{transform:translateY(8px);transition:opacity .35s ease,transform .4s ease!important}
+.card:hover{transform:none}
+.card:hover .thumb img{transform:none}
+main{padding:0 36px 80px}
+.vh{margin:34px 0 24px}
+.grid{gap:20px}
+.acts{gap:8px;padding:2px 14px 14px}
+.acts button{height:34px;border-radius:10px;border-color:var(--line)}
+.acts .rg{color:var(--accent);border-color:var(--accent-line);background:var(--accent-soft)}
+.acts .rg:hover{background:var(--accent);color:var(--accent-ink)}
+/* home */
+.home{padding-top:8vh}
+.home h1{font-size:44px}
+.hero-mark{margin-bottom:22px}
+.hero-mark .tile{width:56px;height:56px;border-radius:17px}
+.newp{border:1px solid var(--line);border-radius:26px;padding:10px;background:var(--surface-2);transition:box-shadow .3s,border-color .3s}
+.newp.flash{animation:newflash 1.2s ease-out}
+@keyframes newflash{0%{box-shadow:0 0 0 0 var(--accent-line);border-color:var(--accent-line)}100%{box-shadow:0 0 0 14px transparent}}
+.newp .nh{display:flex;align-items:center;gap:12px;padding:4px 8px 10px 10px}
+.newp .nt{display:inline-flex;align-items:center;gap:7px;font-size:13px;font-weight:600;white-space:nowrap}
+.newp .nt .i{width:15px;height:15px;color:var(--accent)}
+.newp input{flex:1;min-width:0;height:32px;border:1px solid transparent;border-radius:9px;background:none;color:var(--text);font:500 13.5px var(--sans);padding:0 10px;text-align:right}
+.newp input::placeholder{color:var(--faint);font-weight:400}
+.newp input:hover{border-color:var(--line)}
+.newp input:focus{outline:none;border-color:var(--accent-line);background:var(--surface)}
+.home .box{border-radius:18px;box-shadow:none}
+.recent{margin-top:56px}
+.recent .sect{font-size:15px;font-weight:600;color:var(--text);margin-bottom:16px}
+.newcard{align-items:center;justify-content:center;gap:6px;text-align:center;min-height:210px;border-style:dashed;border-color:var(--line-2);background:none;box-shadow:none;color:var(--muted);padding:20px}
+.newcard:hover{border-color:var(--accent-line);color:var(--text);background:var(--accent-soft);box-shadow:none}
+.newcard .pl{width:40px;height:40px;border-radius:12px;display:grid;place-items:center;background:var(--accent-soft);color:var(--accent);margin-bottom:6px}
+.newcard .pl .i{width:20px;height:20px}
+.newcard b{font-size:14.5px;font-weight:600;color:var(--text)}
+.newcard small{font-size:12.5px}
+@media (max-width:900px){.top a.btn .lbl{display:none}}
+/* the Video prompts tab has its own chat with Cue: a panel on the right, apart from the producer's chat */
+@media (min-width:1024px){
+  body.cuemode .shell{grid-template-columns:minmax(0,1fr) clamp(380px,38vw,560px)}
+  body.cuemode #chat{order:2;border-right:0;margin:12px 12px 12px 0;height:calc(100% - 24px);border:1px solid color-mix(in srgb,var(--cue) 38%,var(--line));border-radius:20px;overflow:hidden}
+  body.cuemode main{order:1}
+}
+body.cuemode #chat .who{color:var(--cue)}
+body.cuemode #chat .chat-h{background:color-mix(in srgb,var(--cue) 7%,transparent)}
+/* prompt studio: the chat is the workspace, the prompts sit beside it */
+@media (min-width:1024px){body.studio .shell{grid-template-columns:clamp(420px,42vw,640px) minmax(0,1fr)}}
+.prow.solo{grid-template-columns:minmax(0,1fr)}
+.prow .cam{margin:8px 0 2px;font-size:13px;color:var(--muted)}
+.newp .seg button{height:26px}
 </style>
 </head>
 <body>
-<div class="aura" aria-hidden="true"><canvas id="glow"></canvas><canvas id="px"></canvas></div>
+<div class="aura" aria-hidden="true"></div>
 <header class="top" id="top"></header>
 <div class="shell" id="shell">
   <aside id="chat" hidden>
@@ -672,14 +715,14 @@ const STEPS = [
 ];
 const VD = {approved:['ok','circle-check-big','Approved'], rejected:['bad','x','Rejected'], pending:['warn','circle-dashed','In QC'], changes:['bad','pencil','Changes requested']};
 const MODELS = {
-  brain:{label:'Brain', sub:'The producer you chat with', opts:[['sonnet','Sonnet 5.5 · fast'],['opus','Opus 5.5 · best'],['haiku','Haiku 5.5 · fastest']]},
-  crew:{label:'Crew', sub:'The six agents', opts:[['sonnet','Sonnet 5.5 · fast'],['opus','Opus 5.5 · best'],['haiku','Haiku 5.5 · fastest']]},
-  image:{label:'Image', sub:'Credits per frame', opts:[['seedream_v5_pro','Seedream 5 Pro'],['nano_banana_2_1','Nano Banana 2.1'],['nano_banana_2','Nano Banana 2'],['nano_banana_pro','Nano Banana Pro'],['gpt_image_2_5','GPT Image 2.5']]},
+  brain:{label:'Brain', sub:'The producer you chat with', opts:[['fable','Fable 5.2 · most capable'],['opus','Opus 5.5 · strong'],['sonnet','Sonnet 5.5 · fast'],['haiku','Haiku 5.5 · fastest']]},
+  crew:{label:'Crew', sub:'The six agents', opts:[['fable','Fable 5.2 · most capable'],['opus','Opus 5.5 · strong'],['sonnet','Sonnet 5.5 · fast'],['haiku','Haiku 5.5 · fastest']]},
+  image:{label:'Image', sub:'Credits per frame', opts:[['seedream_5_5','Seedream 5.5'],['seedream_v5_pro','Seedream 5 Pro'],['nano_banana_2_1','Nano Banana 2.1'],['nano_banana_2','Nano Banana 2'],['nano_banana_pro','Nano Banana Pro'],['gpt_image_2_5','GPT Image 2.5']]},
   video:{label:'Video', sub:'Cue writes prompts for', opts:[['seedance_2_5','Seedance 2.5'],['seedance_2_0','Seedance 2.0'],['kling_3_0','Kling 3.0'],['veo_3_1','Veo 3.1'],['wan_3_0','Wan 3.0'],['auto','Auto · Cue picks']]},
 };
-const DEF_MODELS = {brain:'sonnet', crew:'sonnet', image:'seedream_v5_pro', resolution:'2k', video:'seedance_2_5'};
-// Higgsfield credits per 16:9 frame (get_cost, 2026-10-21); null = not offered (Seedream 5 Pro tops out at 2K)
-const COST = {seedream_v5_pro:{'2k':2.5,'4k':null}, nano_banana_2_1:{'2k':2,'4k':3}, nano_banana_2:{'2k':2,'4k':3}, nano_banana_pro:{'2k':2,'4k':4}, gpt_image_2_5:{'2k':2.75,'4k':4.25}};
+const DEF_MODELS = {brain:'sonnet', crew:'sonnet', image:'seedream_5_5', resolution:'2k', video:'seedance_2_5'};
+// Higgsfield credits per 16:9 frame (get_cost, 2026-10-21; Seedream 5.5 2026-11-10); null = not offered (both Seedreams top out at 2K)
+const COST = {seedream_5_5:{'2k':3.5,'4k':null}, seedream_v5_pro:{'2k':2.5,'4k':null}, nano_banana_2_1:{'2k':2,'4k':3}, nano_banana_2:{'2k':2,'4k':3}, nano_banana_pro:{'2k':2,'4k':4}, gpt_image_2_5:{'2k':2.75,'4k':4.25}};
 const mname = (k,v) => ((MODELS[k].opts.find(o=>o[0]===v)||[])[1]||v||'').split(' · ')[0];
 
 const SLUG = new URLSearchParams(location.search).get('p');
@@ -688,7 +731,8 @@ let ME = {name:'', local:true, sharing:false};  // /api/me: this Mac, or a signe
 let tab = normTab(location.hash.slice(1));
 let SHEET = null, DRAWER = null, CREW = [], bible = {key:null, html:'', toc:[]};
 const OPEN = new Set(), EXPANDED = new Set();
-let homeOpts = {models:{...DEF_MODELS}, mode:'ask', aspect:'16:9'};
+let homeOpts = {models:{...DEF_MODELS}, mode:'ask', aspect:'16:9', kind:'film'};
+const studio = () => !!(S&&S.project&&S.project.kind==='prompter');  // a prompt studio: a direct chat with Cue, prompts only
 function normTab(t){ return ({overview:'brief', qc:'board'})[t] || (STEPS.some(s=>s.k===t) ? t : 'brief'); }
 
 function toast(msg, icon='check'){ const t=$('#toast'); t.innerHTML=ic(icon)+'<span>'+esc(msg)+'</span>'; t.classList.add('on'); clearTimeout(toast._t); toast._t=setTimeout(()=>t.classList.remove('on'),2800); }
@@ -715,16 +759,21 @@ const meBtn = () => ME.local ? (teamLink() ? `<button class="btn ghost sm" data-
 const themeBtn = () => { const t=themeNow(); return `<button class="ibtn" data-act="theme" title="Theme: ${cap(t)}" aria-label="Theme">${ic(t==='dark'?'moon':t==='light'?'sun':'monitor')}</button>`; };
 
 /* ---------- top bar ---------- */
+const HOMEB = `<a class="btn sm homeb" href="/" title="Back to all projects" aria-label="Home">${ic('house')}<span class="lbl">Home</span></a>`;
 const BRAND = `<a class="brand" href="/" title="All projects"><span class="mark">${ic('bird')}</span><span class="w">Shotbird</span></a>`;
 function topbar(){
   const el=$('#top');
   if(!SLUG){ const s='home'+themeNow()+ME.name; if(s===topSig) return; topSig=s;
-    el.innerHTML=`${BRAND}<span class="sp"></span><button class="btn ghost sm" data-act="drawer" data-k="crew">${ic('users')}Crew</button>${themeBtn()}${meBtn()}`; return; }
+    el.innerHTML=`${BRAND}<span class="sp"></span><button class="btn sm acc" data-act="newproj">${ic('plus')}New project</button><button class="btn ghost sm" data-act="drawer" data-k="crew">${ic('users')}Crew</button>${themeBtn()}${meBtn()}`; return; }
   const p=(S&&S.project)||{}, c=(S&&S.credits)||{}, auto=p.mode==='autopilot';
-  const s=JSON.stringify([p.title,p.mode,p.status,c.spent,c.estimated,themeNow(),ME.name]); if(s===topSig) return; topSig=s;
-  el.innerHTML=`${BRAND}<nav class="crumb"><span class="sl">/</span><a class="home-l" href="/">Projects</a><span class="sl">/</span><span class="t">${esc(p.title||SLUG)}</span>${p.status==='done'?`<span class="badge ok">${ic('check')}Done</span>`:''}</nav>
+  const s=JSON.stringify([p.title,p.mode,p.status,c.spent,c.estimated,themeNow(),ME.name,p.kind]); if(s===topSig) return; topSig=s;
+  document.body.classList.toggle('studio', studio());
+  if(studio()){ el.innerHTML=`${BRAND}${HOMEB}<nav class="crumb"><span class="sl">/</span><span class="t">${esc(p.title||SLUG)}</span><span class="badge hot">${ic('clapperboard')}Prompt studio</span></nav>
+    <span class="sp"></span><div class="grp"><a class="btn sm" href="/?new=studio" title="Start a new prompt studio">${ic('plus')}<span class="lbl">New</span></a>${themeBtn()}${meBtn()}</div>`; return; }
+  el.innerHTML=`${BRAND}${HOMEB}<nav class="crumb"><span class="sl">/</span><span class="t">${esc(p.title||SLUG)}</span>${p.status==='done'?`<span class="badge ok">${ic('check')}Done</span>`:''}</nav>
     <span class="sp"></span>
     <div class="grp">
+      <a class="btn sm" href="/?new=1" title="Start a new project">${ic('plus')}<span class="lbl">New project</span></a>
       <div class="seg" role="group" aria-label="Spending mode"><button class="${auto?'':'on'}" data-act="mode" data-mode="ask" title="Ask before spending credits">${ic('shield-check')}<span>Always ask</span></button><button class="${auto?'on auto':''}" data-act="mode" data-mode="autopilot" title="Go ahead within the approved credit cap">${ic('zap')}<span>Autopilot</span></button></div>
       <span class="pill" title="Higgsfield credits: spent / estimated">${ic('coins')}<b>${fmt(c.spent)}</b><span class="lbl">of ${fmt(c.estimated)} credits</span></span>
       <button class="ibtn" data-act="drawer" data-k="activity" title="Activity" aria-label="Activity">${ic('clock')}</button>
@@ -758,14 +807,15 @@ function castVars(x){ const g=GAL[x.id]; if(g&&g.length) return g;
   return x.image?[{path:x.image, label:'main', current:true, verdict:{ok:'approved',bad:'rejected',warn:'pending'}[(castStatus(x)||[])[0]]||''}]:[]; }
 function castView(x){ const vs=castVars(x); return vs.find(r=>r.path===VIEW['c:'+x.id]) || vs.find(r=>r.current) || vs[vs.length-1]; }
 function shotView(sh){ const vs=sh.versions||[]; return vs.find(x=>x.v===VIEW['s:'+sh.id]) || chosen(sh); }
-function shotVerdict(sh, v){ if(!v) return ''; const r=openReq(sh).find(r=>r.v===v.v); if(r) return /^Disapproved/.test(r.text||'')?'rejected':'changes'; return (v.qc&&v.qc.verdict)||'pending'; }
+function shotVerdict(sh, v){ if(!v) return ''; if(openReq(sh).find(r=>r.v===v.v)) return 'changes'; return (v.qc&&v.qc.verdict)||'pending'; }
 // the review bar: approve, disapprove, request changes, or mark an area to edit, for the variation on show
 function actsBar(o){
   const da=`data-k="${o.k}" data-id="${esc(o.id)}" ${o.k==='s'?`data-v="${o.v}"`:`data-img="${esc(o.img)}"`}`, vd=o.verdict;
   return `<div class="acts">
     <button class="ok ${vd==='approved'?'on':''}" data-act="gapprove" ${da} title="${o.inUse?'Approve':'Approve and use this one'}">${ic(vd==='approved'?'circle-check-big':'check')}<span>${vd==='approved'?'Approved':'Approve'}</span></button>
     <button class="no ${vd==='rejected'?'on':''}" data-act="gdis" ${da} title="Disapprove">${ic(vd==='rejected'?'x':'thumbs-down')}<span>${vd==='rejected'?'Disapproved':'Disapprove'}</span></button>
-    <button class="ch ${vd==='changes'?'on':''}" data-act="gchg" ${da} title="Request changes">${ic('pencil')}<span>Changes</span></button>
+    ${vd==='rejected' ? `<button class="rg" data-act="gregen" ${da} title="Ask the crew for a new one">${ic('refresh-cw')}<span>Regenerate</span></button>`
+      : `<button class="ch ${vd==='changes'?'on':''}" data-act="gchg" ${da} title="Request changes">${ic('pencil')}<span>Changes</span></button>`}
     <button class="ed" data-act="gedit" ${da} title="Edit an area: mark it, say what to change" aria-label="Edit an area">${ic('brush')}${o.wide?'<span>Edit area</span>':''}</button></div>`;
 }
 function vstrip(k, id, list, on){  // list: [{key, img, verdict, inUse, title}]
@@ -776,17 +826,17 @@ function stepState(st){ const sts=st.agents.map(a=>agent(a).status||'idle');
   if(sts.includes('error')) return 'error'; if(sts.includes('working')) return 'working'; if(sts.includes('waiting')) return 'waiting';
   if(sts.every(s=>s==='done')) return 'done'; return 'idle'; }
 function stepNote(st, state){
-  const shots=S.shots||[], ok=shots.filter(s=>verdictOf(s)==='approved').length;
-  const what={brief:(S.brief||{}).summary?'Ready':'', cast:(S.cast||[]).length?`${S.cast.length} ${S.cast.length===1?'item':'items'}`:'',
-    board:shots.length?`${ok}/${shots.length} approved${shots.filter(x=>openReq(x).length).length?` · ${shots.filter(x=>openReq(x).length).length} to change`:''}`:'', bible:(S.bible||{}).path?'Ready':'', prompts:(S.prompts||[]).length?`${S.prompts.length} prompts`:''}[st.k];
+  const shots=S.shots||[], ok=shots.filter(s=>verdictOf(s)==='approved').length, hold=shots.filter(s=>verdictOf(s)==='rejected').length, chg=shots.filter(x=>openReq(x).length).length;
+  const what={brief:'', cast:(S.cast||[]).length?`${S.cast.length}`:'',
+    board:shots.length?`${ok}/${shots.length}${chg?` · ${chg} to change`:''}${hold?` · ${hold} on hold`:''}`:'', bible:'', prompts:(S.prompts||[]).length?`${S.prompts.length}`:''}[st.k];
   const who=st.agents.map(cap).join(' + ');
-  if(state==='working') return `${who} working…`; if(state==='waiting') return `${who} · needs you`; if(state==='error') return `${who} · error`;
-  return `${who} · ${what||(state==='done'?'done':'not started')}`;
+  if(state==='working') return `${who} working…`; if(state==='waiting') return 'needs you'; if(state==='error') return 'error';
+  return what;
 }
 function steps(){
-  return `<nav class="steps" aria-label="Project steps">${STEPS.map(st=>{ const state=stepState(st), wk=st.agents.find(a=>agent(a).status==='working'), c=AG[wk||st.agents[0]].c;
-    const b=state==='done'?`<span class="bdg done">${ic('check')}</span>`:state==='working'?'<span class="bdg working"></span>':state==='waiting'?'<span class="bdg waiting"></span>':state==='error'?`<span class="bdg error">${ic('x')}</span>`:'';
-    return `<button class="step ${tab===st.k?'on':''} ${state}" style="--c:${c}" data-act="tab" data-k="${st.k}"><span class="ico">${ic(st.icon)}${b}</span><span class="tx"><b>${st.label}</b><small>${esc(stepNote(st,state))}</small></span></button>`; }).join('')}</nav>`;
+  if(studio()) return '';
+  return `<nav class="steps" aria-label="Project steps">${STEPS.map(st=>{ const state=stepState(st), note=stepNote(st,state);
+    return `<button class="step ${tab===st.k?'on':''} ${state}" data-act="tab" data-k="${st.k}" title="${esc(st.agents.map(cap).join(' + '))}"><span class="sd"></span>${st.label}${note?`<small>${esc(note)}</small>`:''}</button>`; }).join('')}</nav>`;
 }
 const vh = (title, sub, act='') => `<div class="vh"><div class="l"><h1>${esc(title)}</h1>${sub?`<p>${esc(sub)}</p>`:''}</div>${act?`<div class="act">${act}</div>`:''}</div>`;
 const emptyState = (icon, title, text, cta) => `<div class="empty"><span class="ico">${ic(icon)}</span><b>${esc(title)}</b><p>${esc(text)}</p>${cta?`<button class="btn" data-act="say" data-text="${esc(cta)}">${ic('sparkles')}${esc(cta)}</button>`:''}</div>`;
@@ -866,16 +916,35 @@ function vBible(){
              : `<button class="btn acc" data-act="exportpdf">${ic('printer')}Export PDF</button>`);
   return head(acts) + `<div class="doc"><nav class="toc">${bible.toc.length?`<div class="h">Contents</div>${bible.toc.map(([id,t])=>`<button data-act="toc" data-id="${id}">${esc(t)}</button>`).join('')}`:''}</nav><article class="md">${bible.html}</article></div>`;
 }
+const STUDIO_STARTERS = [
+  'Low angle, 24mm, slow push-in from a wide to a medium over 5 s, hard backlight through haze: ',
+  'One 12 s prompt: three shots joined by whip-pan transitions, all moving left to right: ',
+  'Anime, animated on twos: slow tilt up from her shoes to a twilight sky, hair moving in the wind',
+  'Analyse the attached reference video and break down its shots, camera moves and transitions',
+];
 function vPrompts(){
   const P=S.prompts||[], engines=[...new Set(P.map(p=>String(p.model||'').replace(/\s*\(.*\)/,'')).filter(Boolean))];
   const head=vh('Video prompts', P.length?`${P.length} prompts · ${engines.join(', ')||'video'}${agent('cue').task?' · '+agent('cue').task:''}`:(agent('cue').task||'Cue writes an image-to-video prompt for every approved frame.'),
-    P.length?`<button class="btn acc" data-act="copyall">${ic('copy')}Copy all</button>`:'');
-  if(!P.length) return head + emptyState('square-play','No video prompts yet','Cue writes one per approved frame, tuned for your video engine.','Write the video prompts');
+    P.length?`<button class="btn" data-act="direct" data-shot="">${ic('clapperboard')}Direct all</button><button class="btn acc" data-act="copyall">${ic('copy')}Copy all</button>`:'');
+  {  // one layout everywhere: prompts as he directed them, never a prompt per storyboard frame
+    const sh=vh(studio()?(S.project.title||'Prompt studio'):'Video prompts', P.length?`${P.length} ${P.length===1?'prompt':'prompts'} · ${engines.join(', ')||'Seedance 2.5'} · text-to-video · SFX only`:'Direct the shot in the chat. Cue writes the prompt.',
+      P.length?`<button class="btn acc" data-act="copyall">${ic('copy')}Copy all</button>`:'');
+    if(!P.length) return sh+`<div class="empty"><span class="ico">${ic('clapperboard')}</span><b>Direct your first shot</b><p>Describe it like a director, or attach a reference video for Cue to analyse. Angles, lenses, moves and transitions are understood as you say them.</p>
+      <div class="sugg" style="justify-content:center;margin-top:6px">${STUDIO_STARTERS.map(t=>`<button data-act="fillchat" data-text="${esc(t)}">${ic('sparkles')}${esc(t.length>58?t.slice(0,56)+'…':t)}</button>`).join('')}</div></div>`;
+    return sh + P.map((p,i)=>{ const open=EXPANDED.has(i), long=(p.prompt||'').length>900;
+      return `<div class="prow solo"><div style="min-width:0"><div class="hd"><span class="t">${esc(p.shot)}${p.title?` · ${esc(p.title)}`:''}</span>${p.model?`<span class="badge hot">${ic('film')}${esc(String(p.model).replace(/\s*\(.*\)/,''))}</span>`:''}${p.duration?`<span class="badge">${esc(p.duration)}</span>`:''}<button class="btn sm" style="margin-left:auto" data-act="direct" data-shot="${esc(p.shot)}" title="Give Cue a new direction for this prompt">${ic('clapperboard')}Direct</button><button class="btn sm" data-act="copy" data-i="${i}">${ic('copy')}Copy</button></div>
+        ${p.camera?`<p class="cam">${esc(p.camera)}</p>`:''}
+        <div class="code ${open||!long?'open':''}"><pre id="pr${i}">${esc(p.prompt||'')}</pre>${long?`<div class="more"><button class="btn sm" data-act="expand" data-i="${i}">${ic('chevron-down')}${open?'Show less':'Show full prompt'}</button></div>`:''}</div>
+        ${p.negative?`<details class="subd"><summary>${ic('chevron-right')}Avoid</summary><pre class="raw">${esc(p.negative)}</pre></details>`:''}
+        ${p.notes?`<details class="subd"><summary>${ic('chevron-right')}Notes</summary><p class="muted" style="font-size:13px">${esc(p.notes)}</p></details>`:''}</div></div>`; }).join('');
+  }
+  if(!P.length) return vh('Video prompts','Direct Cue in the chat on the right. This chat is only for video prompts.') + `<div class="empty"><span class="ico">${ic('clapperboard')}</span><b>Direct your first shot</b><p>Describe it like a director, or attach a reference video for Cue to analyse. Angles, lenses, moves and transitions are understood as you say them. SFX only, no music.</p>
+      <div class="sugg" style="justify-content:center;margin-top:6px">${STUDIO_STARTERS.map(t=>`<button data-act="fillchat" data-text="${esc(t)}">${ic('sparkles')}${esc(t.length>58?t.slice(0,56)+'…':t)}</button>`).join('')}</div></div>`;
   const shot=id=>(S.shots||[]).find(s=>s.id===id)||{};
   return head + P.map((p,i)=>{ const sh=shot(p.shot), v=chosen(sh)||{}, open=EXPANDED.has(i), long=(p.prompt||'').length>700;
     return `<div class="prow"><div><div class="thumb" ${v.image?`data-act="shot" data-id="${esc(sh.id)}"`:''}>${v.image?`<img src="${esc(src(v.image))}" loading="lazy" alt="">`:'<div class="ph">No frame</div>'}</div>
         <div class="ml">${p.duration?`<div><span class="k">Duration</span><span>${esc(p.duration)}</span></div>`:''}${p.camera?`<div><span class="k">Camera</span><span>${esc(p.camera)}</span></div>`:''}</div></div>
-      <div style="min-width:0"><div class="hd"><span class="t">${esc(p.shot)}${sh.title?` · ${esc(sh.title)}`:''}</span>${p.model?`<span class="badge hot">${ic('film')}${esc(String(p.model).replace(/\s*\(.*\)/,''))}</span>`:''}<button class="btn sm" style="margin-left:auto" data-act="copy" data-i="${i}">${ic('copy')}Copy</button></div>
+      <div style="min-width:0"><div class="hd"><span class="t">${esc(p.shot)}${sh.title?` · ${esc(sh.title)}`:''}</span>${p.model?`<span class="badge hot">${ic('film')}${esc(String(p.model).replace(/\s*\(.*\)/,''))}</span>`:''}<button class="btn sm" style="margin-left:auto" data-act="direct" data-shot="${esc(p.shot)}" title="Give Cue your direction for this shot">${ic('clapperboard')}Direct</button><button class="btn sm" data-act="copy" data-i="${i}">${ic('copy')}Copy</button></div>
         <div class="code ${open||!long?'open':''}"><pre id="pr${i}">${esc(p.prompt||'')}</pre>${long?`<div class="more"><button class="btn sm" data-act="expand" data-i="${i}">${ic(open?'chevron-down':'chevron-down')}${open?'Show less':'Show full prompt'}</button></div>`:''}</div>
         ${p.negative?`<details class="subd"><summary>${ic('chevron-right')}Avoid</summary><pre class="raw">${esc(p.negative)}</pre></details>`:''}
         ${p.notes?`<details class="subd"><summary>${ic('chevron-right')}Notes</summary><p class="muted" style="font-size:13px">${esc(p.notes)}</p></details>`:''}</div></div>`; }).join('');
@@ -910,6 +979,8 @@ function view(animate){
   if(!S) return;
   const views={brief:vBrief, cast:vCast, board:vBoard, bible:vBible, prompts:vPrompts};
   const sc=$('#app'), y=sc.scrollTop;
+  if(studio()) tab='prompts';
+  setChannel(!studio() && tab==='prompts' ? 'cue' : 'main');
   sc.innerHTML = steps() + views[tab]();
   sc.scrollTop = y;
   reveal($('#app'), animate);  // fresh entrance on a tab switch; otherwise only content not seen yet
@@ -963,17 +1034,23 @@ function drawSheet(){
 function stepShot(d){ const SH=S.shots||[], i=SH.findIndex(s=>s.id===SHEET.id), n=SH[i+d]; if(n){ SHEET={type:'shot', id:n.id}; drawSheet(); } }
 
 /* ---------- ask dialog (replaces browser prompts) ---------- */
-function ask({title, sub, chips=[], cta='Send', placeholder='Describe the change…', optional=false}){
+// line: a one-line field (↵ confirms) · field:false: a plain yes/no that resolves true · danger: a red confirm button
+function ask({title, sub, chips=[], cta='Send', placeholder='Describe the change…', optional=false, value='', line=false, field=true, danger=false}){
   return new Promise(resolve=>{
     const el=$('#dlg');
-    el.innerHTML=`<div class="dlg" role="dialog" aria-modal="true"><h3>${esc(title)}</h3><p>${esc(sub||'')}</p><textarea id="dlgtx" placeholder="${esc(placeholder)}"></textarea>
+    const box = !field ? '' : line ? `<input id="dlgtx" type="text" maxlength="70" placeholder="${esc(placeholder)}" value="${esc(value)}">`
+      : `<textarea id="dlgtx" placeholder="${esc(placeholder)}">${esc(value)}</textarea>`;
+    el.innerHTML=`<div class="dlg" role="dialog" aria-modal="true"><h3>${esc(title)}</h3><p>${esc(sub||'')}</p>${box}
       ${chips.length?`<div class="sugg">${chips.map(c=>`<button data-chip="${esc(c)}">${ic('plus')}${esc(c)}</button>`).join('')}</div>`:''}
-      <div class="row"><span class="hint"><span class="kbd">⌘</span> <span class="kbd">↵</span> to send</span><button class="btn ghost" data-r="0">Cancel</button><button class="btn dark" data-r="1">${esc(cta)}</button></div></div>`;
-    el.classList.add('on'); const tx=$('#dlgtx'); setTimeout(()=>tx.focus(),30);
-    const done=val=>{ el.classList.remove('on'); el.innerHTML=''; el.onclick=null; resolve(val); };
+      <div class="row"><span class="hint">${field&&!line?'<span class="kbd">⌘</span> <span class="kbd">↵</span> to send':''}</span><button class="btn ghost" data-r="0">Cancel</button><button class="btn ${danger?'danger':'dark'}" data-r="1">${esc(cta)}</button></div></div>`;
+    el.classList.add('on'); const tx=$('#dlgtx');
+    setTimeout(()=>{ if(!tx) return el.querySelector(`[data-r="${danger?0:1}"]`).focus(); tx.focus(); if(line) tx.select(); },30);  // a stray ↵ never deletes
+    const val=()=>!tx || (tx.value.trim()||(optional?'':null));
+    const done=v=>{ el.classList.remove('on'); el.innerHTML=''; el.onclick=el.onkeydown=null; resolve(v); };
     el.onclick=e=>{ const c=e.target.closest('[data-chip]'); if(c){ tx.value=(tx.value.trim()?tx.value.trim()+'; ':'')+c.dataset.chip; tx.focus(); return; }
-      const r=e.target.closest('[data-r]'); if(r) return done(r.dataset.r==='1'&&(tx.value.trim()||optional)?tx.value.trim():null); if(e.target===el) done(null); };
-    tx.onkeydown=e=>{ if(e.key==='Enter'&&(e.metaKey||e.ctrlKey)){ e.preventDefault(); done(tx.value.trim()||(optional?'':null)); } if(e.key==='Escape'){ e.stopPropagation(); done(null); } };
+      const r=e.target.closest('[data-r]'); if(r) return done(r.dataset.r==='1'?val():null); if(e.target===el) done(null); };
+    el.onkeydown=e=>{ if(e.key==='Escape'){ e.stopPropagation(); return done(null); }
+      if(e.key==='Enter'&&tx&&e.target===tx&&!e.isComposing&&(line||e.metaKey||e.ctrlKey)){ e.preventDefault(); done(val()); } };
   });
 }
 
@@ -990,9 +1067,27 @@ const target = g => g.k==='s' ? {shot:g.id, v:g.v} : {target:g.id, image:g.image
 function genApprove(g){ feedback({action:'approve', ...target(g)}, g.inUse?`${g.name} approved`:`${g.name} approved and now in use`); }
 async function genDisapprove(g){
   const t=await ask({title:`Disapprove ${g.name}?`, optional:true, cta:'Disapprove', placeholder:'What’s wrong? (optional)',
-    sub: g.inUse ? `It’s the one in use, so ${g.crew} makes a new one and Hawk checks it.` : 'It’s an alternate, so it’s only marked as disapproved.',
+    sub: g.inUse ? 'It goes on hold. Nothing is regenerated until you press Regenerate or ask in the chat.' : 'It’s an alternate, so it’s only marked as disapproved.',
     chips:['Face drifted','Wrong proportions','Off-brand','Bad hands','Doesn’t match the brief']});
-  if(t!==null) feedback({action:'disapprove', ...target(g), text:t}, g.inUse?`${g.name}: sent back to the crew`:`${g.name} disapproved`);
+  if(t!==null) feedback({action:'disapprove', ...target(g), text:t}, g.inUse?`${g.name} disapproved · on hold`:`${g.name} disapproved`);
+}
+async function genRegen(g){
+  const t=await ask({title:`Regenerate ${g.name}?`, optional:true, cta:'Regenerate', placeholder:'What should be different? (optional)',
+    sub: g.k==='s' ? 'Slate makes a new version, then Hawk checks it. This spends credits.' : 'Hatch makes a new variation; frames that use it are re-shot. This spends credits.',
+    chips: g.k==='s' ? ['Same shot, new take','Keep the face exactly','Fix proportions','Wider framing','Closer'] : ['Same brief, new take','Different face','Different wardrobe','Fix proportions']});
+  if(t!==null) feedback({action: g.k==='s'?'reject':'note', ...target(g), text: t || 'Make a new one: the last was disapproved'}, `${g.name}: sent to the crew`);
+}
+// your direction for a video prompt: Cue rewrites it (one shot, or all of them) on exactly what you say
+async function directPrompt(shot){
+  const t=await ask({title: shot?`Direct ${shot}`:'Direct every video prompt', cta:'Send to Cue',
+    placeholder:'e.g. low angle, 24mm, slow push-in to a close-up over 4 s, hard side light, she turns on the second beat…',
+    sub:'Say it like a director: angle, lens, move, speed, blocking, light, timing, or “in the style of …”. Cue rewrites the prompt to it. SFX only, no music.',
+    chips:['Low angle','Slow push-in','Handheld','Locked-off, symmetrical','Long lens, shallow focus','Whip pan','In the style of Villeneuve','In the style of Fincher','In the style of Wong Kar-wai','Anime: Shinkai light','Anime: action sakuga']});
+  if(!t) return;
+  if(window.innerWidth<1024) toggleChat(true);
+  if(cueChat()) return sendChat(shot ? `DIRECTION for ${shot}: ${t}\nRewrite only ${shot} to this direction; keep its number.` : `DIRECTION for every prompt: ${t}\nRewrite all of them to this direction; keep their numbers.`);
+  sendChat(shot ? `DIRECTION for ${shot}'s video prompt: ${t}\nCue rewrites only ${shot}'s prompt to this direction (director-styles skill). No frames are regenerated and no credits are spent.`
+               : `DIRECTION for every video prompt: ${t}\nCue rewrites all the video prompts to this direction (director-styles skill). No frames are regenerated and no credits are spent.`);
 }
 async function genChanges(g){
   const t=await ask({title:`Changes to ${g.name}`, cta:'Send to crew',
@@ -1160,7 +1255,7 @@ function drawPop(pop){ const m=curModels(), res=m.resolution||'2k';
   const max2k=(COST[m.image]||{})['4k']===null;
   pop.innerHTML=`<div class="ph">Models${SLUG?' for this project':' for the new project'}</div>`
     + row('brain',MODELS.brain) + row('crew',MODELS.crew) + row('image',MODELS.image,cost)
-    + `<div class="pr"><span class="l"><b>Resolution</b><small>${max2k?'Seedream 5 Pro tops out at 2K':'Every image generation'}</small></span><div class="seg">${['2k','4k'].map(r=>`<button type="button" class="${res===r?'on':''}" data-act="res" data-res="${r}" ${r==='4k'&&max2k?'disabled':''}>${r.toUpperCase()}</button>`).join('')}</div></div>`
+    + `<div class="pr"><span class="l"><b>Resolution</b><small>${max2k?`${esc(mname('image',m.image))} tops out at 2K`:'Every image generation'}</small></span><div class="seg">${['2k','4k'].map(r=>`<button type="button" class="${res===r?'on':''}" data-act="res" data-res="${r}" ${r==='4k'&&max2k?'disabled':''}>${r.toUpperCase()}</button>`).join('')}</div></div>`
     + row('video',MODELS.video); }
 function togglePop(force){ const pop=$('#pop'); if(!pop) return; const on=force??!pop.classList.contains('on'); if(on) drawPop(pop); pop.classList.toggle('on',on); }
 async function setModel(k,v){
@@ -1232,6 +1327,19 @@ async function copyText(t, msg){
 
 /* ---------- chat ---------- */
 let chatN=0, running=false, chatOpen=false;
+// Two chats per film project: the producer's ('main'), and Cue's own ('cue') that lives only in the Video prompts tab.
+let CH='main'; const DRAFT={};
+const cueChat = () => CH==='cue' || studio();
+function setChannel(ch){
+  if(ch===CH || !$('#chatin')) return;
+  const ta=$('#chatin'); DRAFT[CH]=ta.value; CH=ch; chatN=0; running=false; log().innerHTML=''; setTyping(false);
+  ta.value=DRAFT[ch]||''; ta.style.height='auto'; ATT=[]; drawAtts(); syncSend();
+  document.body.classList.toggle('cuemode', ch==='cue');
+  ta.placeholder = ch==='cue' ? 'Direct a shot, or attach a reference video…' : 'Ask Shotbird to change anything…';
+  const w=document.querySelector('#chat .who'); if(w) w.textContent = ch==='cue' ? 'Cue · Video prompts' : 'Shotbird';
+  $('#fab').innerHTML=`${ic('message-circle')}${ch==='cue'?'Direct Cue':'Ask Shotbird'}<span class="u"></span>`;
+  $('#stopbtn').hidden=true; drawStatus(); drawSugg(); chatPoll();
+}
 const log = () => $('#log');
 function opts(text){ const m=text.match(/\[\[options:\s*([^\]]+)\]\]/i); return m?{clean:text.replace(m[0],'').trim(), opts:m[1].split('|').map(s=>s.trim()).filter(Boolean).slice(0,4)}:{clean:text, opts:[]}; }
 function rowHTML(r){
@@ -1252,13 +1360,12 @@ function setTyping(on){ let t=$('#typing');
   if(!on && t) t.remove(); }
 function suggestions(){
   if(!S) return [];
+  if(cueChat()) return (S.prompts||[]).length ? [['wand-sparkles','Tighten the last prompt'],['film','Same prompt, different lens and angle']] : [];
   const out=[], has=x=>(x||[]).length;
   if(!has(S.cast)) out.push(['users-round','Build the cast']);
   else if(!has(S.shots)) out.push(['clapperboard','Board all shots']);
   if(has(S.shots) && !(S.bible||{}).path) out.push(['book-open-text','Write the film bible']);
-  if(has(S.shots) && !has(S.prompts)) out.push(['square-play','Write the video prompts']);
   out.push(['lightbulb',"What's next?"]);
-  if(has(S.prompts)) out.push(['wand-sparkles','Tighten the video prompts']);
   if(has(S.shots)) out.push(['clapperboard','Re-shoot a frame']);
   return out.slice(0,3);
 }
@@ -1267,7 +1374,8 @@ function drawSugg(){ const el=$('#sugg'); if(!el) return; const ta=$('#chatin');
   if(el.innerHTML!==html) el.innerHTML=html; el.hidden=!list.length; }
 async function chatPoll(){
   if(!SLUG) return;
-  let d; try{ d=await (await fetch(`/api/p/${SLUG}/chat?since=${chatN}&t=${Date.now()}`)).json(); online=true; }catch(e){ online=false; drawStatus(); return; }
+  const ch=CH; let d; try{ d=await (await fetch(`/api/p/${SLUG}/chat?since=${chatN}${ch==='cue'?'&ch=cue':''}&t=${Date.now()}`)).json(); online=true; }catch(e){ online=false; drawStatus(); return; }
+  if(ch!==CH) return;  // the tab changed while this was in flight
   const L=log(), atBottom=L.scrollHeight-L.scrollTop-L.clientHeight<100;
   if(d.messages.length){
     setTyping(false); const h=$('#hello'); if(h) h.remove();
@@ -1277,14 +1385,14 @@ async function chatPoll(){
   }
   const was=running; chatN=d.n; running=d.running; setTyping(running);
   if(was!==running && S){ refreshSteps(); if(DRAWER==='crew') drawDrawer(); }  // agents light up only while a turn runs
-  if(chatN===0 && !running && !$('#hello')) L.innerHTML=`<div class="hello" id="hello"><span class="mark">${ic('bird')}</span><b>What should we change?</b>Ask in plain words: “make her older”, “warmer light in S3”, “Kling prompts for S2”. I’ll route it to the right agent.</div>`;
+  if(chatN===0 && !running && !$('#hello')) L.innerHTML=`<div class="hello" id="hello"><span class="mark">${ic('bird')}</span>${cueChat()?'<b>What’s the shot?</b>Direct it in your own words: size, angle, lens, move, light, timing, transitions. Or attach a reference video and I’ll break it down. I write the Seedance prompt. SFX only, no music.':'<b>What should we change?</b>Ask in plain words: “make her older”, “warmer light in S3”, “Kling prompts for S2”. I’ll route it to the right agent.'}</div>`;
   $('#stopbtn').hidden=!running; $('#queued').textContent=d.queued?`${d.queued} queued`:'';
   drawStatus(); drawSugg();
 }
 function drawStatus(){
   const working=S?ORDER.filter(k=>agent(k).status==='working').map(cap):[];
   $('#chatstatus').innerHTML = !online ? '<span class="dot"></span>Offline · is the Shotbird server running?'
-    : running ? `<span class="dot busy"></span>Working${working.length?' · '+esc(working.join(', ')):'…'}` : '<span class="dot live"></span>Ready';
+    : running ? `<span class="dot busy"></span>${cueChat()?'Writing…':`Working${working.length?' · '+esc(working.join(', ')):'…'}`}` : '<span class="dot live"></span>Ready';
 }
 async function sendChat(preset){
   const ta=$('#chatin'), fromBox=typeof preset!=='string', text=(fromBox?ta.value:preset).trim();
@@ -1293,13 +1401,29 @@ async function sendChat(preset){
   if(!text && !files.length) return;
   if(fromBox){ ta.value=''; ta.style.height='auto'; ATT=[]; drawAtts(); $('#sendbtn').disabled=true; }
   const h=$('#hello'); if(h) h.remove();
-  try{ await post(`/api/p/${SLUG}/chat`,{text, files}); }catch(e){ toast('Could not reach the Shotbird server','triangle-alert'); return; }
+  try{ await post(`/api/p/${SLUG}/chat`,{text, files, ch:CH}); }catch(e){ toast('Could not reach the Shotbird server','triangle-alert'); return; }
   running=true; drawSugg(); setTyping(true); chatPoll();
 }
 function toggleChat(open){ chatOpen=open; $('#chat').classList.toggle('open',open); if(open){ $('#fab').classList.remove('unread'); setTimeout(()=>$('#chatin').focus(),260); } }
 async function authBanner(el){
+  try{ await ME_READY; }catch(e){}
   let s={}; try{ s=await (await fetch('/api/status')).json(); }catch(e){ return; }
-  el.innerHTML = s.ready ? '' : `<div class="authbar"><b>One-time setup.</b> The chat runs on your Claude login. In Terminal run <code>sh ~/.claude/skills/shotbird/login.sh</code>, sign in, then come back.<div style="margin-top:10px"><button class="btn sm" data-act="copycmd">${ic('copy')}Copy command</button></div></div>`;
+  const cmd=`In Terminal run <code>sh ~/.claude/skills/shotbird/login.sh</code>, sign in, then come back.<div style="margin-top:10px"><button class="btn sm" data-act="copycmd">${ic('copy')}Copy command</button></div>`;
+  let html='';
+  if(!s.ready){
+    // Claude sign-ins have a hard lifetime and can't be renewed in place; the crew can't run until it's redone.
+    html = ME.local
+      ? `<div class="authbar"><b>Shotbird needs your Claude sign-in.</b> The crew runs on it, and it has expired or was never done. ${cmd}</div>`
+      : `<div class="authbar"><b>Shotbird is paused.</b> The Claude sign-in on the host Mac has expired, so the crew can't run. Ask the owner to sign in again.</div>`;
+  } else if(s.days_left!=null && s.days_left<=5){
+    const when = s.days_left===0 ? 'today' : s.days_left===1 ? 'tomorrow' : `in ${s.days_left} days`;
+    const date = s.expires ? new Date(s.expires).toLocaleDateString(undefined,{day:'numeric',month:'short'}) : '';
+    html = ME.local
+      ? `<div class="authbar"><b>Claude sign-in expires ${when}${date?` (${date})`:''}.</b> It can't be renewed, so the crew will stop then. ${cmd}</div>`
+      : `<div class="authbar"><b>Shotbird pauses ${when}${date?` (${date})`:''}</b> unless the owner renews the Claude sign-in on the host Mac.</div>`;
+  }
+  el.innerHTML = html;
+  if(!el.dataset.poll){ el.dataset.poll='1'; setInterval(()=>authBanner(el), 10*60*1000); }  // re-check every 10 min
 }
 function wireComposer(ta, onSend){
   const send=$('#sendbtn');
@@ -1322,7 +1446,7 @@ async function poll(){
   try{ const r=await fetch(`/p/${SLUG}/state.json?t=${Date.now()}`); if(r.status===401) return signIn(); if(r.status===404){ missing=true; throw 0; } if(!r.ok) throw 0;
     const s=await r.json(); online=true; missing=false;
     const sig=JSON.stringify([(s.project||{}).updated,(s.events||[]).length,(s.project||{}).mode,(s.project||{}).models]);
-    if(sig!==stateSig){ const first=!S; stateSig=sig; S=s; topbar(); view(first); drawSugg(); drawStatus(); $('#modelchip').innerHTML=modelChip(); if(SHEET&&SHEET.type!=='img'&&SHEET.type!=='doc') drawSheet(); if(DRAWER) drawDrawer(); loadGallery(); }
+    if(sig!==stateSig){ const first=!S; stateSig=sig; S=s; if(studio()){ $('#chatin').placeholder='Direct a shot, or attach a reference video…'; const w=document.querySelector('#chat .who'); if(w) w.textContent='Cue · Prompt studio'; const hh=$('#hello'); if(hh&&first){ hh.remove(); chatPoll(); } $('#fab').innerHTML=`${ic('message-circle')}Direct Cue<span class="u"></span>`; } topbar(); view(first); drawSugg(); drawStatus(); $('#modelchip').innerHTML=modelChip(); if(SHEET&&SHEET.type!=='img'&&SHEET.type!=='doc') drawSheet(); if(DRAWER) drawDrawer(); loadGallery(); }
   }catch(e){ online=false; drawStatus();
     if(!S) $('#app').innerHTML = missing ? `<div style="padding-top:60px">${emptyState('folder-open','Project not found','This project folder has no state yet.')}</div><p style="text-align:center"><a class="btn" href="/">${ic('arrow-left')}All projects</a></p>`
       : `<div style="padding-top:60px">${emptyState('loader-circle','Connecting…','Waiting for the Shotbird server on localhost:8777.')}</div>`; }
@@ -1337,33 +1461,54 @@ const STARTERS = [
 let projSig='';
 async function homeRefresh(){
   let list=[]; try{ list=await (await fetch('/api/projects?t='+Date.now())).json(); }catch(e){ return; }
-  const sig=JSON.stringify(list); if(sig===projSig) return; const first=!projSig; projSig=sig;
-  $('#recent').innerHTML = list.length ? `<div class="sect">Recent projects <span class="n">${list.length}</span></div><div class="grid">${list.map(p=>{ const st=p.status==='done'?['ok','Done']:p.status==='running'||!p.status?['hot','In progress']:['',cap(p.status)];
-      return `<a class="card" href="/?p=${encodeURIComponent(p.slug)}"><div class="thumb">${p.thumb?`<img src="${esc(p.thumb)}" loading="lazy" alt="">`:`<div class="ph">${ic('clapperboard')}</div>`}<span class="tag tl">${esc(p.aspect||'16:9')}</span></div>
-        <div class="cb"><div class="t"><span>${esc(p.title)}</span></div><div class="s">${esc(p.client||'No client')} · ${p.shots} shots · ${esc(ago(p.updated))}</div>
+  const sig=JSON.stringify([list, ME.local]); if(sig===projSig) return; const first=!projSig; projSig=sig;
+  $('#recent').innerHTML = list.length ? `<div class="sect">Projects <span class="n">${list.length}</span></div><div class="grid"><button class="card newcard" data-act="newproj"><span class="pl">${ic('plus')}</span><b>New project</b><small>Start from a brief, a script or a reference</small></button>${list.map(p=>{ const st=p.status==='done'?['ok','Done']:p.status==='running'||!p.status?['hot','In progress']:['',cap(p.status)];
+      return `<a class="card" href="/?p=${encodeURIComponent(p.slug)}"><div class="thumb">${p.thumb?`<img src="${esc(p.thumb)}" loading="lazy" alt="">`:`<div class="ph">${ic(p.kind==='prompter'?'square-play':'clapperboard')}</div>`}<span class="tag tl">${esc(p.aspect||'16:9')}</span>
+        <div class="hov"><button data-act="prename" data-slug="${esc(p.slug)}" data-title="${esc(p.title||'')}" title="Rename this project">${ic('pencil')}Rename</button>${ME.local?`<button class="no" data-act="pdelete" data-slug="${esc(p.slug)}" data-title="${esc(p.title||'')}" title="Move this project to the Trash">${ic('trash-2')}Delete</button>`:''}</div></div>
+        <div class="cb"><div class="t"><span>${esc(p.title)}</span></div><div class="s">${p.kind==='prompter'?`Prompt studio · ${p.prompts||0} prompts`:`${esc(p.client||'No client')} · ${p.shots} shots`} · ${esc(ago(p.updated))}</div>
         <div style="display:flex;gap:6px;margin-top:10px"><span class="badge ${st[0]}">${esc(st[1])}</span>${(p.qc||{}).approved?`<span class="badge">${p.qc.approved} approved</span>`:''}</div></div></a>`; }).join('')}</div>`
     : '';
   reveal($('#recent'), first);
 }
+async function projRename(slug, old){
+  const t=await ask({title:'Rename project', sub:'The link and the project folder stay the same.', line:true, value:old, placeholder:'Project name', cta:'Rename'});
+  if(!t||t===old) return;
+  try{ await post(`/api/p/${slug}/rename`,{title:t}); toast(`Renamed to “${t}”`,'pencil'); homeRefresh(); }
+  catch(e){ toast('Could not rename the project','triangle-alert'); }
+}
+async function projDelete(slug, title){
+  const ok=await ask({title:`Delete “${title||slug}”?`, field:false, danger:true, cta:'Move to Trash',
+    sub:'The whole project (brief, cast, frames, film bible, prompts and chat) moves to the Trash on this Mac. Until the Trash is emptied, you can drag it back into the Shotbird folder.'});
+  if(!ok) return;
+  try{ await post(`/api/p/${slug}/delete`,{}); toast(`“${title||slug}” moved to the Trash`,'trash-2'); homeRefresh(); }
+  catch(e){ toast(e.message==='409'?'The crew is working on it. Stop it first, then delete.':'Could not delete the project','triangle-alert'); }
+}
+const PH = {film:'Describe the film, or attach a brief, PDF or reference video…', prompter:'Direct the first shot, or attach a reference video for Cue to analyse…'};
+function setKind(k){ homeOpts.kind=k; document.querySelectorAll('#kindseg button').forEach(b=>b.classList.toggle('on',b.dataset.kind===k)); const ta=$('#chatin'); if(ta) ta.placeholder=PH[k]; const h=document.querySelector('.home h1'), sub=document.querySelector('.home .sub'), st=document.querySelector('.starters');
+  if(h) h.textContent = k==='prompter' ? 'What’s the shot?' : 'What are we making?';
+  if(sub) sub.textContent = k==='prompter' ? 'Direct it in your own words, or attach reference videos. Cue writes the video prompts. Text-to-video, SFX only.' : 'Brief Shotbird. The crew handles the cast, storyboard, QC, film bible and video prompts.';
+  if(st) st.innerHTML=(k==='prompter'?STUDIO_STARTERS.map(t=>[t.length>44?t.slice(0,42)+'…':t,t]):STARTERS).map(([l,t])=>`<button data-act="fill" data-text="${esc(t)}">${ic('sparkles')}${esc(l)}</button>`).join(''); }
+function focusNew(){ const ta=$('#chatin'), box=$('#newp'); if(!ta||!box) return; window.scrollTo({top:0, behavior:'smooth'}); box.classList.remove('flash'); void box.offsetWidth; box.classList.add('flash'); setTimeout(()=>ta.focus({preventScroll:true}),250); }
 function homeInit(){
   $('#chat').remove(); $('#fab').remove(); $('#shell').classList.add('home'); topbar();
   const auto=homeOpts.mode==='autopilot';
   $('#app').innerHTML=`<section class="home"><div class="hero-mark" id="heromark"><span class="tile"><span class="bird">${ic('bird')}</span></span></div><h1>What are we making?</h1><p class="sub">Brief Shotbird. The crew handles the cast, storyboard, QC, film bible and video prompts.</p>
     <div id="homeauth"></div>
+    <div class="newp" id="newp"><div class="nh"><span class="nt">${ic('plus')}New project</span><input id="pname" type="text" maxlength="70" placeholder="Project name (optional)" aria-label="Project name"></div>
     <div class="composer" id="homecomposer"><div class="box"><div class="atts" id="atts" hidden></div><textarea id="chatin" rows="3" placeholder="Describe the film, or attach a brief, PDF or reference video…"></textarea>
       <div class="row"><button class="ibtn" data-act="attach" title="Attach a brief, PDF, reference video or image" aria-label="Attach files">${ic('paperclip')}</button><button class="chipbtn" data-act="models" id="modelchip"></button>
         <select class="sel" id="aspect" title="Aspect ratio" aria-label="Aspect ratio">${['16:9','9:16','1:1','4:5','21:9'].map(a=>`<option ${a===homeOpts.aspect?'selected':''}>${a}</option>`).join('')}</select>
         <div class="seg"><button class="${auto?'':'on'}" data-act="mode" data-mode="ask" title="Ask before spending credits">${ic('shield-check')}Always ask</button><button class="${auto?'on auto':''}" data-act="mode" data-mode="autopilot" title="Go ahead within the approved credit cap">${ic('zap')}Autopilot</button></div>
         <button class="send" id="sendbtn" data-act="start" aria-label="Start project" disabled>${ic('arrow-up')}</button></div></div>
-      <div class="pop" id="pop"></div></div>
-    <div class="starters sugg">${STARTERS.map(([l,t])=>`<button data-act="fill" data-text="${esc(t)}">${ic('sparkles')}${esc(l)}</button>`).join('')}</div>
-    <div class="crewrow">${ORDER.map(k=>`<button style="--c:${AG[k].c}" data-act="drawer" data-k="crew" title="${AG[k].role}"><span class="ic">${ic(AG[k].icon)}</span>${cap(k)}</button>`).join('')}</div></section>
+      <div class="pop" id="pop"></div></div></div>
+    <div class="starters sugg">${STARTERS.map(([l,t])=>`<button data-act="fill" data-text="${esc(t)}">${ic('sparkles')}${esc(l)}</button>`).join('')}</div></section>
     <section class="recent" id="recent"></section>`;
   $('#modelchip').innerHTML=modelChip();
   $('#aspect').onchange=e=>{ homeOpts.aspect=e.target.value; };
   wireComposer($('#chatin'), startProject); wireDrop($('#homecomposer')); reveal($('#app'), true); heroBird();
   setTimeout(()=>$('#chatin').focus(),50);
   authBanner($('#homeauth')); homeRefresh(); setInterval(homeRefresh,5000);
+  { const nw=new URLSearchParams(location.search).get('new'); if(nw){ history.replaceState(null,'','/'); if(nw==='studio') setKind('prompter'); setTimeout(focusNew,300); } }
 }
 // The logo bird in flight: same head, beak and back as the Lucide bird, legs tucked, two wings that beat from the shoulder
 const BIRD_FLY = `<span class="i"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
@@ -1415,14 +1560,14 @@ async function startProject(){
   const ta=$('#chatin'), text=ta.value.trim(); if(!text && !ATT.length) return; $('#sendbtn').disabled=true;
   try{
     const withFiles=ATT.length>0;
-    const r=await post('/api/new',{text, models:homeOpts.models, mode:homeOpts.mode, aspect:homeOpts.aspect, start:!withFiles}); if(!r.slug) throw 0;
+    const r=await post('/api/new',{text, name:($('#pname')||{}).value||'', kind:homeOpts.kind, models:homeOpts.models, mode:homeOpts.mode, aspect:homeOpts.aspect, start:!withFiles}); if(!r.slug) throw 0;
     if(withFiles){  // the project exists now: upload the attachments, then send the brief with them
       ATT.forEach(a=>a.status='uploading'); drawAtts();
       for(const a of ATT) await upload(a, r.slug);
       const files=ATT.filter(a=>a.status==='done').map(a=>a.info);
       await post(`/api/p/${r.slug}/chat`,{text: text || 'New brief: see the attached files.', files});
     }
-    location.href='/?p='+encodeURIComponent(r.slug)+'#brief';
+    location.href='/?p='+encodeURIComponent(r.slug)+(homeOpts.kind==='prompter'?'#prompts':'#brief');
   }catch(e){ toast('Could not start the project','triangle-alert'); syncSend(); }
 }
 
@@ -1438,12 +1583,19 @@ document.addEventListener('click', async e=>{
     case 'prev': stepShot(-1); break;
     case 'next': stepShot(1); break;
     case 'cast': openSheet({type:'cast', id:d.id}); break;
+    case 'prename': e.preventDefault(); projRename(d.slug, d.title); break;
+    case 'pdelete': e.preventDefault(); projDelete(d.slug, d.title); break;
     case 'img': openSheet({type:'img', src:d.src}); break;
     case 'close': closeSheet(); break;
     case 'view': VIEW[d.k+':'+d.id] = d.k==='s' ? +d.val : d.val; view(); if(SHEET&&SHEET.id===d.id) drawSheet(); break;
     case 'gapprove': genApprove(genOf(d)); break;
     case 'gdis': genDisapprove(genOf(d)); break;
     case 'gchg': genChanges(genOf(d)); break;
+    case 'gregen': genRegen(genOf(d)); break;
+    case 'direct': directPrompt(d.shot); break;
+    case 'newproj': if(!SLUG) setKind('film'); focusNew(); break;
+    case 'newstudio': setKind('prompter'); focusNew(); break;
+    case 'kind': setKind(d.kind); $('#chatin').focus(); break;
     case 'gedit': openEditor(genOf(d)); break;
     case 'copy': copyText(S.prompts[+d.i].prompt||'', `${S.prompts[+d.i].shot} prompt copied`); break;
     case 'copyall': copyText((S.prompts||[]).map(p=>`${p.shot} — ${p.model||''}\n${p.duration||''}\n\n${p.prompt||''}`).join('\n\n———\n\n'), 'All prompts copied'); break;
@@ -1462,7 +1614,7 @@ document.addEventListener('click', async e=>{
     case 'fill': { const ta=$('#chatin'); ta.value=d.text; ta.dispatchEvent(new Event('input')); ta.focus(); ta.setSelectionRange(ta.value.length,ta.value.length); break; }
     case 'send': sendChat(); break;
     case 'start': startProject(); break;
-    case 'stop': await post(`/api/p/${SLUG}/stop`); chatPoll(); break;
+    case 'stop': await post(`/api/p/${SLUG}/stop`,{ch:CH}); chatPoll(); break;
     case 'models': togglePop(); break;
     case 'mode': setMode(d.mode); break;
     case 'theme': cycleTheme(); break;
@@ -1595,7 +1747,7 @@ document.addEventListener('keydown', e=>{
 })();
 if(navigator.userAgent.includes('ShotbirdApp')) document.documentElement.classList.add('in-app');
 $('#filein').addEventListener('change', e=>{ addFiles(e.target.files); e.target.value=''; });
-loadMe();
+const ME_READY=loadMe();  // the auth banner waits on it, so a teammate never sees the owner's command
 if(SLUG){
   document.body.classList.add('proj');
   $('#app').addEventListener('scroll', ()=>document.body.classList.toggle('scrolled', $('#app').scrollTop>6), {passive:true});

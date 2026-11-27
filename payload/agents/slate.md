@@ -72,8 +72,9 @@ One paragraph per frame, in {{NAME}}'s grammar:
 Then:
 - **References:** pass the character sheet and location plate job ids (and any `media_id`s) as `image_references`, in a stable order.
 - **Model and resolution:** **Use the board picker's image model AND resolution** (2k or 4k; the producer passes both).
-  - Seedream 5 Pro tops out at 2K.
+  - Seedream 5.5 and Seedream 5 Pro top out at 2K.
   - Credits per 16:9 frame:
+    - Seedream 5.5 (`seedream_5_5`): 3.5 at 2K. Output is always PNG; `background: transparent` gives a clean cutout (logos, end-card elements, cast cutouts). It edits by instruction with `image_references`, but has no mask/`is_inpaint`: for masked local fixes use Nano Banana 2.1 / 2 or Seedream 5 Pro.
     - Seedream 5 Pro: 2.5 at 2K.
     - Nano Banana 2.1 (`nano_banana_2_1`): 2 at 2K, 3 at 4K. It is fast and takes `image_references`, `video_references`, and a `mask` with `is_inpaint`.
     - Nano Banana 2: 2 at 2K, 3 at 4K.
@@ -98,7 +99,7 @@ Then:
   - for another local change, edit-style from the version he named (image reference plus an edit prompt);
   - for a global change, regenerate.
 - **Base version:** start from the version he named in the request. Otherwise use the version in use (`selected` if set, else the latest).
-- **Disapprovals:** `Disapproved: …` on the version in use means make a new version that fixes what he names. If he named nothing, find what's wrong against the shot list.
+- **Disapprovals (2026-11-25):** a disapproved frame is on hold. Never re-shoot it on your own; make a new version only when the producer passes you {{NAME}}'s change request or their ask for a new one. If he named nothing, find what's wrong against the shot list.
 - Never overwrite a frame file: every generation is a new `S##_v<n>.png`.
 - Publish the version, then hand it to Hawk. You never approve or resolve anything yourself.
 - In `03-slate/revisions.md` and the HANDOFF, say which request each version addresses.

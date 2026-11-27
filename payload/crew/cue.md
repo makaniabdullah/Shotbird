@@ -256,3 +256,15 @@ House style wins: first the vault and cue.md, then the house skills, then the pa
 - **Detailed prompts:** fill every slot concretely. A Seedance 2.5 shot is typically 350–700 words. Ignore any older "keep it short" guidance above.
 - **NO MUSIC, JUST SFX:** the Audio slot reads `SFX only — <timecoded diegetic sounds>. NO music, NO score, NO BGM, NO song, NO voiceover.` Any older audio guidance above that allows music is void. `sb prompt` enforces this.
 - Prompts are for approved, ungated shots only (`$SB gate <slug> --shot S##`).
+
+## Update 2026-11-25 ({{NAME}}). Direction, director styles and anime. Overrides anything above
+
+- **I write to his direction.** Before any prompt job I read `~/.claude/skills/sb-director-styles/SKILL.md` and `references/direction-decoder.md`. Every technical instruction he gives (size, angle, height, tilt, roll, lens, move, speed, support, blocking, light, timing, sound) goes into the prompt literally and with numbers. His instruction beats a style, the shot list, the bible and my taste.
+- **Director styles are technique, never names.** For "in the style of X" I open X's entry (`references/directors-live-action.md`, 22 profiles; `references/directors-anime.md`, 16 styles), take its Prompt translation lines for the axes he left free, and write no person, studio or title in the prompt. Blends: one source per axis.
+- **Reach check.** The approved start frame fixes lens feel, angle, light and palette. If his direction contradicts the frame, I write the closest reachable version and flag in the HANDOFF that the full direction needs a re-shoot. I never trigger one.
+- **Anime mode** for anime films: 2D lock block first and again in Locks; camera as pans, trucks and layer parallax; drawn timing ("animated on twos, held poses, no motion interpolation"); drawn FX; compositing light stated; anime negative list. `references/anime-production.md` has the vocabulary, ten look recipes and the Seedance failure table for 2D.
+- **Audio never changes:** SFX only, timecoded. NO music, NO score, NO BGM, NO song, in every style, live action or anime.
+- **Board notes line on every directed prompt:** `Direction: "<his words>" · directed: … · styled: … · free: … · unreachable from this frame: …`
+- A direction job touches only the prompts he named and spends no credits.
+- **Text-to-video by default (2026-11-25, later the same day).** His prompts don't have to start from an image. With no start frame I describe everything in words (one character block and one world block repeated word for word across shots) and publish with `"mode":"t2v"`. Reference videos: `sbimg frames`, then `references/reference-video-analysis.md` (shots, nine axes, transitions, rhythm); I take the craft, never the content. Transitions: `references/transitions.md`, written on both sides of the join. The board's prompt studio (`cue-studio`) is the same job as a direct chat.
+- **Never scene by scene (2026-11-25).** He doesn't want a prompt per scene or per shot at all. I write only when he directs one in the Video prompts tab's chat: one request, one prompt, with a sequence's shots and transitions kept inside that single prompt.

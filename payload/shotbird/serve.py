@@ -17,6 +17,8 @@
   POST /api/p/<slug>/upload?name=F  -> raw file body (brief .md/.txt/.pdf/.docx, reference .mp4/.mov, images) -> 00-inbox/
   POST /api/p/<slug>/export {doc}   -> film bible -> 05-lore/film-bible.pdf (headless Chrome prints /print?p=<slug>)
   POST /api/p/<slug>/open {path, reveal} -> open a project file in its Mac app, or show it in Finder
+  POST /api/p/<slug>/rename {title}  -> change the project's name on the board (the slug and folder stay)
+  POST /api/p/<slug>/delete         -> move the project folder to the Trash (this Mac only, never mid-turn)
   GET  /print?p=<slug>              -> print layout of the film bible
   POST /api/new {text, models, mode, aspect} -> create a project from a brief and hand it to the orchestrator
   GET  /login · POST /api/login {name, password} · GET /logout · GET /api/me -> office-network sign-in (see below)
@@ -65,20 +67,34 @@ SLUG = re.compile(r"^[a-z0-9][a-z0-9-]{0,80}$")
 CREW = ["scout", "hatch", "slate", "hawk", "lore", "cue"]
 AGENTS_DIR = os.path.expanduser("~/.claude/agents")
 ORCHESTRATOR = "shotbird-producer"
+STUDIO = "cue-studio"  # a prompt-studio project is a direct chat with Cue: no crew, no frames, no gate
 # Model picker: Claude models for the orchestrator ("brain") and the crew; Higgsfield image model; Cue's video engine.
 MODEL_CHOICES = {
-    "brain": ["sonnet", "opus", "haiku"],
-    "crew": ["sonnet", "opus", "haiku"],
-    "image": ["seedream_v5_pro", "nano_banana_2_1", "nano_banana_2", "nano_banana_pro", "gpt_image_2_5"],
+    "brain": ["fable", "opus", "sonnet", "haiku"],
+    "crew": ["fable", "opus", "sonnet", "haiku"],
+    "image": ["seedream_5_5", "seedream_v5_pro", "nano_banana_2_1", "nano_banana_2", "nano_banana_pro", "gpt_image_2_5"],
     "resolution": ["2k", "4k"],
     "video": ["auto", "seedance_2_0", "seedance_2_5", "kling_3_0", "veo_3_1", "wan_3_0"],
 }
-DEFAULT_MODELS = {"brain": "sonnet", "crew": "sonnet", "image": "seedream_v5_pro", "resolution": "2k", "video": "seedance_2_5"}
-MAX_RES = {"seedream_v5_pro": "2k"}  # Seedream 5 Pro tops out at 2K on Higgsfield
+DEFAULT_MODELS = {"brain": "sonnet", "crew": "sonnet", "image": "seedream_5_5", "resolution": "2k", "video": "seedance_2_5"}
+MAX_RES = {"seedream_5_5": "2k", "seedream_v5_pro": "2k"}  # both Seedreams top out at 2K on Higgsfield
 UPLOAD_KINDS = {".md": "brief", ".txt": "brief", ".pdf": "pdf", ".docx": "doc", ".mp4": "video", ".mov": "video",
                 ".m4v": "video", ".png": "image", ".jpg": "image", ".jpeg": "image", ".webp": "image"}
 MAX_UPLOAD = 2 * 1024 ** 3
+IS_MAC = sys.platform == "darwin"
 CHROME = "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome"
+
+
+def find_browser():
+    """Chrome or Chromium for the PDF export: the Mac app, or whatever the Linux server has installed."""
+    if IS_MAC:
+        return CHROME if os.path.exists(CHROME) else None
+    for n in ("google-chrome", "google-chrome-stable", "chromium", "chromium-browser", "chrome"):
+        p = shutil.which(n, path=clean_env()["PATH"])
+        if p:
+            return p
+    found = sorted(glob.glob(os.path.expanduser("~/.cache/ms-playwright/chromium-*/chrome-linux*/chrome")))
+    return found[-1] if found else None
 SBIMG = os.path.join(HERE, "bin", "sbimg")
 IMAGE_EXT = (".png", ".jpg", ".jpeg", ".webp")
 MAX_EDIT = 40 * 1024 ** 2  # an area edit's mask arrives as a PNG data URL
@@ -208,7 +224,13 @@ def safe_join(base, relpath):
 # ----------------------------------------------------------------------------------------------
 
 def claude_bin():
-    """Newest Claude Code binary bundled with the desktop app (the path changes with each update)."""
+    """Newest Claude Code binary bundled with the desktop app (the path changes with each update).
+    On a Linux server it is the native install, normally ~/.local/bin/claude."""
+    if not IS_MAC:
+        for p in (os.path.expanduser("~/.local/bin/claude"), os.path.expanduser("~/.claude/local/claude"), "/usr/local/bin/claude"):
+            if os.access(p, os.X_OK):
+                return p
+        return shutil.which("claude", path=clean_env()["PATH"])
     found = glob.glob(os.path.expanduser(
         "~/Library/Application Support/Claude/claude-code/*/*/claude.app/Contents/MacOS/claude"))
     def ver(p):
@@ -220,7 +242,7 @@ def claude_bin():
 def clean_env():
     env = {k: os.environ[k] for k in ("HOME", "USER", "LOGNAME", "LANG", "TMPDIR") if k in os.environ}
     env.setdefault("HOME", os.path.expanduser("~"))
-    env["PATH"] = "/usr/bin:/bin:/usr/sbin:/sbin"
+    env["PATH"] = "/usr/bin:/bin:/usr/sbin:/sbin" + ("" if IS_MAC else ":/usr/local/bin:" + os.path.expanduser("~/.local/bin"))
     return env
 
 
@@ -232,7 +254,18 @@ def auth_status():
         out = subprocess.run([b, "auth", "status"], capture_output=True, text=True, timeout=30,
                              env=clean_env(), stdin=subprocess.DEVNULL).stdout
         s = json.loads(out)
-        return {"ready": bool(s.get("loggedIn")), "method": s.get("authMethod"), "bin": b}
+        r = {"ready": bool(s.get("loggedIn")), "method": s.get("authMethod"), "bin": b}
+        exp = s.get("loginExpiresAt")
+        if r["ready"] and exp:
+            # A claude.ai sign-in has a hard lifetime (about a month) and can't be renewed in place.
+            # The board warns ahead of it, so a turn never fails on it unannounced.
+            try:
+                t = dt.datetime.fromisoformat(exp.replace("Z", "+00:00"))
+                r["expires"] = exp
+                r["days_left"] = max(0, int((t - dt.datetime.now(dt.timezone.utc)).total_seconds() // 86400))
+            except ValueError:
+                pass
+        return r
     except Exception as e:  # noqa: BLE001 - surface any failure to the UI
         return {"ready": False, "reason": type(e).__name__, "bin": b}
 
@@ -240,7 +273,9 @@ def auth_status():
 class Runner:
     """Serialises orchestrator turns for one project and records the chat."""
 
-    def __init__(self, slug):
+    def __init__(self, slug, channel="main"):
+        # channel "cue" is the Video prompts tab's own chat: a direct line to Cue, apart from the producer's chat
+        self.channel = channel
         self.slug, self.dir = slug, os.path.join(ROOT, slug)
         self.lock = threading.Lock()
         self.queue, self.board_notes = [], []
@@ -249,7 +284,10 @@ class Runner:
 
     # chat log -------------------------------------------------------------------------------
     def chat_file(self):
-        return os.path.join(self.dir, "chat.jsonl")
+        return os.path.join(self.dir, "cue-chat.jsonl" if self.channel == "cue" else "chat.jsonl")
+
+    def session_file(self):
+        return os.path.join(self.dir, ".cue_session.json" if self.channel == "cue" else ".chat_session.json")
 
     def append(self, role, text, **extra):
         row = dict(t=now(), role=role, text=text, **extra)
@@ -273,11 +311,11 @@ class Runner:
 
     # session --------------------------------------------------------------------------------
     def session(self):
-        p = os.path.join(self.dir, ".chat_session.json")
+        p = self.session_file()
         return json.load(open(p)).get("session_id") if os.path.exists(p) else None
 
     def save_session(self, sid):
-        json.dump({"session_id": sid, "updated": now()}, open(os.path.join(self.dir, ".chat_session.json"), "w"))
+        json.dump({"session_id": sid, "updated": now()}, open(self.session_file(), "w"))
 
     # turns ----------------------------------------------------------------------------------
     def send(self, text, role="user", files=None, by=None, remote=False):
@@ -333,6 +371,8 @@ class Runner:
 
     def settle(self):
         """Between turns no crew agent runs, so reset any agent still marked 'working' to idle (keeping its task)."""
+        if self.channel == "cue":
+            return  # Cue's own chat never drives the crew, and the producer may be mid-turn beside it
         try:
             agents = json.load(open(os.path.join(self.dir, "state.json"), encoding="utf-8")).get("agents") or {}
         except (OSError, ValueError):
@@ -347,6 +387,12 @@ class Runner:
             return json.load(open(os.path.join(self.dir, "state.json"), encoding="utf-8")).get("project", {}).get("mode") or "ask"
         except (OSError, ValueError):
             return "ask"
+
+    def kind(self):
+        try:
+            return json.load(open(os.path.join(self.dir, "state.json"), encoding="utf-8")).get("project", {}).get("kind") or "film"
+        except (OSError, ValueError):
+            return "film"
 
     def models(self):
         try:
@@ -369,6 +415,18 @@ class Runner:
                   % (self.slug, self.dir, self.slug, NAME, m["crew"], m["image"], m["resolution"], m["video"], m["crew"],
                      "Autopilot: proceed within the approved credit cap" if self.mode() == "autopilot"
                      else "Always ask: ask before spending credits"))
+        studio = self.kind() == "prompter" or self.channel == "cue"
+        if studio:
+            header = ("[Shotbird prompt studio] project slug=%s · folder=%s · board=http://localhost:8777/?p=%s\n"
+                      "[Video engine from %s] %s ('auto' means Seedance 2.5 unless he names another)\n"
+                      "[Rules] Text-to-video by default. Prompts only: generate nothing, spend no credits. NO MUSIC, JUST SFX.\n"
+                      % (self.slug, self.dir, self.slug, NAME, m["video"]))
+            if self.channel == "cue":
+                header += ("[Cue section of a full Shotbird project] The brief (brief.md), decisions.md, the shot list "
+                           "(03-slate/shotlist.md) and the film bible (05-lore/) are in the folder: read them only when he "
+                           "refers to the film, a shot or a character. When he names a storyboard shot (S01…), keep that id; "
+                           "otherwise number P01, P02… Publish every prompt with \"mode\":\"t2v\". Never touch the cast, "
+                           "frames, QC or bible, and never start other agents.\n")
         if remote:
             header += ("[Shared on the office network] Messages tagged [From <name>, a teammate…] come from teammates "
                        "using %s's Mac. For this turn: work only inside this project's folder; don't read or change %s's "
@@ -377,7 +435,7 @@ class Runner:
                        % (NAME, NAME, NAME))
         body = "\n".join(["[Board] " + n for n in notes] + msgs)
         sid = self.session()
-        cmd = [b, "-p", header + "\n" + body, "--agent", ORCHESTRATOR, "--model", m["brain"],
+        cmd = [b, "-p", header + "\n" + body, "--agent", STUDIO if studio else ORCHESTRATOR, "--model", m["brain"],
                "--output-format", "stream-json", "--verbose",
                "--permission-mode", "auto",
                "--add-dir", ROOT, "--add-dir", os.path.expanduser("~/.claude/skills")]
@@ -388,7 +446,9 @@ class Runner:
         else:
             cmd += ["--session-id", str(uuid.uuid4())]  # saved only once Claude reports the session started
         log = open(os.path.join(self.dir, ".chat_stderr.log"), "a", encoding="utf-8")
-        self.proc = subprocess.Popen(cmd, cwd=self.dir, env=clean_env(), stdin=subprocess.DEVNULL,
+        # A crew agent the producer left running in the background must be allowed to finish: by default the CLI
+        # stops such agents 10 minutes after the producer's last words (a long Cue or Slate job was lost that way).
+        self.proc = subprocess.Popen(cmd, cwd=self.dir, env=dict(clean_env(), CLAUDE_CODE_PRINT_BG_WAIT_CEILING_MS="0"), stdin=subprocess.DEVNULL,
                                      stdout=subprocess.PIPE, stderr=log, text=True, bufsize=1)
         for line in self.proc.stdout:
             try:
@@ -418,7 +478,7 @@ class Runner:
             if ev.get("is_error"):
                 msg = ev.get("result") or ev.get("terminal_reason") or "error"
                 if "No conversation found" in msg:
-                    sp = os.path.join(self.dir, ".chat_session.json")
+                    sp = self.session_file()
                     if os.path.exists(sp):
                         os.remove(sp)
                     msg = "The previous chat session couldn't be resumed, so I've reset it. Please send your message again."
@@ -431,11 +491,12 @@ class Runner:
 RUNNERS, RUNNERS_LOCK = {}, threading.Lock()
 
 
-def runner(slug):
+def runner(slug, channel="main"):
+    key = slug if channel == "main" else (slug, channel)
     with RUNNERS_LOCK:
-        if slug not in RUNNERS:
-            RUNNERS[slug] = Runner(slug)
-        return RUNNERS[slug]
+        if key not in RUNNERS:
+            RUNNERS[key] = Runner(slug, channel)
+        return RUNNERS[key]
 
 
 def set_models(slug, picks):
@@ -496,10 +557,38 @@ def save_upload(slug, name, rfile, length):
     info = {"path": "00-inbox/" + fn, "name": base[:120], "size": length, "kind": UPLOAD_KINDS[ext]}
     if ext == ".docx":  # agents can't read .docx, so keep a plain-text copy beside it
         txt = path[:-5] + ".txt"
-        subprocess.run(["/usr/bin/textutil", "-convert", "txt", "-output", txt, path], capture_output=True)
+        docx_to_text(path, txt)
         if os.path.exists(txt):
             info["text"] = "00-inbox/" + os.path.basename(txt)
     return info
+
+
+def docx_to_text(path, txt):
+    """Plain-text copy of a Word file: macOS textutil on a Mac, the file's own XML anywhere else."""
+    if IS_MAC:
+        subprocess.run(["/usr/bin/textutil", "-convert", "txt", "-output", txt, path], capture_output=True)
+        return
+    try:
+        import xml.etree.ElementTree as ET
+        import zipfile
+        ns = "{http://schemas.openxmlformats.org/wordprocessingml/2006/main}"
+        with zipfile.ZipFile(path) as z:
+            root = ET.fromstring(z.read("word/document.xml"))
+        lines = []
+        for para in root.iter(ns + "p"):
+            parts = []
+            for el in para.iter():
+                if el.tag == ns + "t" and el.text:
+                    parts.append(el.text)
+                elif el.tag == ns + "tab":
+                    parts.append("\t")
+                elif el.tag in (ns + "br", ns + "cr"):
+                    parts.append("\n")
+            lines.append("".join(parts))
+        with open(txt, "w", encoding="utf-8") as f:
+            f.write("\n".join(lines).strip() + "\n")
+    except (OSError, KeyError, ValueError, ET.ParseError, zipfile.BadZipFile):
+        pass  # no text copy: the agents just see the .docx name
 
 
 def checked_files(slug, files):
@@ -526,8 +615,18 @@ def scaled(full, slug, width):
     os.makedirs(cache, exist_ok=True)
     out = os.path.join(cache, re.sub(r"[^A-Za-z0-9._-]", "_", os.path.relpath(full, os.path.join(ROOT, slug))) + ".jpg")
     if not os.path.exists(out) or os.path.getmtime(out) < os.path.getmtime(full):
-        subprocess.run(["/usr/bin/sips", "-s", "format", "jpeg", "-s", "formatOptions", "82", "-Z", str(width),
-                        full, "--out", out], capture_output=True)
+        if IS_MAC:
+            subprocess.run(["/usr/bin/sips", "-s", "format", "jpeg", "-s", "formatOptions", "82", "-Z", str(width),
+                            full, "--out", out], capture_output=True)
+        else:
+            try:
+                from PIL import Image
+                with Image.open(full) as im:
+                    im = im.convert("RGB")
+                    im.thumbnail((width, width), Image.LANCZOS)  # like sips -Z: fit inside, never enlarge
+                    im.save(out, "JPEG", quality=82)
+            except Exception:  # noqa: BLE001 - a missing thumbnail just falls back to the original
+                pass
     return out if os.path.exists(out) else full
 
 
@@ -536,13 +635,15 @@ def export_pdf(slug):
     st = json.load(open(os.path.join(ROOT, slug, "state.json"), encoding="utf-8"))
     if not (st.get("bible") or {}).get("path"):
         raise ValueError("Lore hasn't written the film bible yet.")
-    if not os.path.exists(CHROME):
-        raise ValueError("PDF export uses Google Chrome, which isn't installed.")
+    browser = find_browser()
+    if not browser:
+        raise ValueError("PDF export needs Google Chrome or Chromium, which isn't installed.")
     out = os.path.join(ROOT, slug, "05-lore", "film-bible.pdf")
     os.makedirs(os.path.dirname(out), exist_ok=True)
     tmp, prof = out + ".tmp.pdf", tempfile.mkdtemp(prefix="sb-chrome-")
     try:
-        subprocess.run([CHROME, "--headless=new", "--disable-gpu", "--no-first-run", "--no-default-browser-check",
+        subprocess.run([browser, "--headless=new", "--disable-gpu", "--no-first-run", "--no-default-browser-check"]
+                       + ([] if IS_MAC else ["--no-sandbox"]) + [
                         "--user-data-dir=" + prof, "--no-pdf-header-footer", "--run-all-compositor-stages-before-draw",
                         "--virtual-time-budget=20000", "--print-to-pdf=" + tmp,
                         "http://127.0.0.1:%d/print?p=%s" % (PORT, slug)], capture_output=True, timeout=150)
@@ -696,13 +797,13 @@ def area_edit(slug, body, r, who=None, remote=False):
     return req
 
 
-def new_project(text, aspect="16:9", mode="ask"):
-    words = re.findall(r"[a-z0-9]+", text.lower())[:5] or ["project"]
+def new_project(text, aspect="16:9", mode="ask", name=""):
+    words = re.findall(r"[a-z0-9]+", (name or text).lower())[:5] or ["project"]
     base = "-".join(words)[:40].strip("-") + "-" + dt.date.today().strftime("%m%d")
     slug, i = base, 2
     while os.path.exists(os.path.join(ROOT, slug)):
         slug, i = "%s-%d" % (base, i), i + 1
-    title = text.strip().split("\n")[0][:70] or "New project"
+    title = name or text.strip().split("\n")[0][:70] or "New project"
     with tempfile.NamedTemporaryFile("w", suffix=".md", delete=False, encoding="utf-8") as f:
         f.write(text)
         brief = f.name
@@ -710,6 +811,34 @@ def new_project(text, aspect="16:9", mode="ask"):
                     "--aspect", aspect, "--mode", mode, "--brief-file", brief], check=True, capture_output=True, text=True)
     os.unlink(brief)
     return slug
+
+
+def trash_project(slug):
+    """Move a project folder to the macOS Trash, so a delete can be undone until the Trash is emptied."""
+    src = os.path.join(ROOT, slug)
+    if not IS_MAC:  # the freedesktop Trash: the folder plus a .trashinfo note, so it can be restored
+        from urllib.parse import quote
+        tdir = os.path.expanduser("~/.local/share/Trash")
+        os.makedirs(os.path.join(tdir, "files"), exist_ok=True)
+        os.makedirs(os.path.join(tdir, "info"), exist_ok=True)
+        name = slug
+        if os.path.exists(os.path.join(tdir, "files", name)):
+            name += " " + dt.datetime.now().strftime("%Y-%m-%d %H.%M.%S")
+        with open(os.path.join(tdir, "info", name + ".trashinfo"), "w", encoding="utf-8") as f:
+            f.write("[Trash Info]\nPath=%s\nDeletionDate=%s\n" % (quote(src), dt.datetime.now().strftime("%Y-%m-%dT%H:%M:%S")))
+        shutil.move(src, os.path.join(tdir, "files", name))
+        return
+    dest = os.path.join(os.path.expanduser("~/.Trash"), slug)
+    if os.path.exists(dest):
+        dest += " " + dt.datetime.now().strftime("%Y-%m-%d %H.%M.%S")
+    try:
+        return os.rename(src, dest)
+    except OSError:
+        pass
+    # macOS may not let this process write into the Trash folder itself: ask Finder to do it
+    subprocess.run(["/usr/bin/osascript", "-e", "on run argv", "-e",
+                    'tell application "Finder" to delete (POSIX file (item 1 of argv) as alias)', "-e", "end run", src],
+                   check=True, capture_output=True, text=True, timeout=60)
 
 
 # ----------------------------------------------------------------------------------------------
@@ -866,7 +995,7 @@ class H(BaseHTTPRequestHandler):
                             if vs and vs[-1].get("image"):
                                 thumb = "/p/%s/%s" % (slug, vs[-1]["image"])
                                 break
-                        out.append(dict(s.get("project", {}), shots=len(shots), qc=s.get("qc", {}), thumb=thumb))
+                        out.append(dict(s.get("project", {}), shots=len(shots), prompts=len(s.get("prompts") or []), qc=s.get("qc", {}), thumb=thumb))
             out.sort(key=lambda x: x.get("updated", ""), reverse=True)
             return self.send(200, out)
         if path == "/api/crew":
@@ -876,7 +1005,7 @@ class H(BaseHTTPRequestHandler):
         m = re.match(r"^/api/p/([^/]+)/chat$", path)
         if m and SLUG.match(m.group(1)) and os.path.isdir(os.path.join(ROOT, m.group(1))):
             since = int((parse_qs(u.query).get("since") or ["0"])[0] or 0)
-            r = runner(m.group(1))
+            r = runner(m.group(1), "cue" if (parse_qs(u.query).get("ch") or [""])[0] == "cue" else "main")
             rows, n = r.rows(since)
             return self.send(200, {"messages": rows, "n": n, "running": r.running, "queued": len(r.queue)})
         m = re.match(r"^/api/p/([^/]+)/gallery$", path)
@@ -929,13 +1058,17 @@ class H(BaseHTTPRequestHandler):
                 return self.send(400, {"error": "empty brief"})
             aspect = body.get("aspect") if body.get("aspect") in ASPECTS else "16:9"
             mode = "autopilot" if body.get("mode") == "autopilot" else "ask"
-            slug = new_project(text, aspect, mode)
+            name = " ".join(str(body.get("name") or "").split())[:70]
+            slug = new_project(text, aspect, mode, name)
+            if body.get("kind") == "prompter":
+                subprocess.run(["/usr/bin/python3", "-I", os.path.join(HERE, "sb.py"), "merge", slug, "project",
+                                "--json", json.dumps({"kind": "prompter"})], check=True, capture_output=True, text=True)
             if isinstance(body.get("models"), dict):
                 set_models(slug, body["models"])
             if start:  # start=false: the board uploads attachments first, then sends the brief as a chat message
                 runner(slug).send(text, by=who, remote=remote)
             return self.send(200, {"slug": slug})
-        m = re.match(r"^/api/p/([^/]+)/(chat|stop|feedback|models|mode|export|open|edit)$", path)
+        m = re.match(r"^/api/p/([^/]+)/(chat|stop|feedback|models|mode|export|open|edit|rename|delete)$", path)
         if not (m and SLUG.match(m.group(1))):
             return self.send(404, {"error": "not found"})
         slug, action = m.group(1), m.group(2)
@@ -943,6 +1076,8 @@ class H(BaseHTTPRequestHandler):
         if not os.path.isdir(pdir):
             return self.send(404, {"error": "no project"})
         r = runner(slug)
+        if body.get("ch") == "cue" and action in ("chat", "stop"):
+            r = runner(slug, "cue")
         if action == "chat":
             text = str(body.get("text", "")).strip()[:20000]
             files = checked_files(slug, body.get("files"))
@@ -956,7 +1091,7 @@ class H(BaseHTTPRequestHandler):
             except (ValueError, OSError, subprocess.TimeoutExpired) as e:
                 return self.send(400, {"error": str(e)})
         if action == "open":
-            if remote:  # it would open on this Mac's screen; the board downloads the file instead
+            if remote or not IS_MAC:  # it would open on this Mac's screen; the board downloads the file instead
                 return self.send(403, {"error": "remote"})
             rp = str(body.get("path", ""))
             full = safe_join(pdir, rp) if rp and not rp.startswith("/") else None
@@ -966,6 +1101,34 @@ class H(BaseHTTPRequestHandler):
             return self.send(200, {"ok": True})
         if action == "stop":
             r.stop()
+            return self.send(200, {"ok": True})
+        if action == "rename":
+            title = re.sub(r"\s+", " ", str(body.get("title", ""))).strip()[:70]
+            if not title:
+                return self.send(400, {"error": "Type a name."})
+            res = sb("merge", slug, "project", "--json", json.dumps({"title": title}))
+            if res.returncode:
+                return self.send(500, {"error": res.stderr.strip() or "rename failed"})
+            r.note(tag('Project renamed to "%s"' % title))
+            return self.send(200, {"ok": True, "title": title})
+        if action == "delete":
+            if remote:  # teammates can't remove this Mac's work
+                return self.send(403, {"error": "Projects can only be deleted on the Mac that runs Shotbird."})
+            if runner(slug, "cue").running:
+                return self.send(409, {"error": "Cue is writing prompts for this project. Stop it first."})
+            with r.lock:
+                busy, r.running = r.running, True  # no crew turn may start while the folder moves
+            if busy:
+                return self.send(409, {"error": "The crew is working on this project. Stop it first."})
+            try:
+                trash_project(slug)
+            except (OSError, subprocess.SubprocessError) as e:
+                with r.lock:
+                    r.running = False
+                return self.send(500, {"error": "Couldn't move it to the Trash: %s" % e})
+            with RUNNERS_LOCK:
+                RUNNERS.pop(slug, None)
+                RUNNERS.pop((slug, "cue"), None)
             return self.send(200, {"ok": True})
         if action == "edit":
             try:
@@ -1014,32 +1177,35 @@ class H(BaseHTTPRequestHandler):
                 sb("cast", slug, "--json", json.dumps({"id": row["target"], "status": "approved",
                                                        "resolves": "%s approved on the board" % who}))
             r.note(tag("Approved %s%s" % (what, "" if in_use or not (vnum or img) else ": it is now the one in use")))
-        elif act == "disapprove" and not in_use:
-            # an alternate that isn't in use: recorded, nothing to redo
+        elif act == "disapprove":
+            # A disapproval is a verdict, not an order: it is recorded and the item goes on hold. Nothing is
+            # regenerated until he asks (Changes / Regenerate on the board, or in the chat).
             if sh and vnum:
                 sb("qc", slug, row["shot"], vnum, "rejected", "--by", "abdullah",
                    "--notes", "Disapproved by %s%s" % (who, (": " + text) if text else ""))
             elif item and img:
                 sb("review", slug, "--cast", row["target"], "--image", img, "rejected", "--notes", text)
-            r.note(tag("Disapproved %s%s (an alternate, not in use)" % (what, (": " + text) if text else "")))
+            elif item:
+                sb("cast", slug, "--json", json.dumps({"id": row["target"], "status": "rejected"}))
+            r.note(tag("Disapproved %s%s (%s). ON HOLD: do NOT regenerate, re-shoot or route it until %s asks for a new one."
+                       % (what, (": " + text) if text else "",
+                          "the one in use, so Lore and Cue wait for it" if in_use else "an alternate, not in use", who)))
         elif sh:
             # changes, or disapproving the frame in use: blocking until a new version fixes it
-            ask = ("Disapproved: " + (text or "make a new version")) if act == "disapprove" else (text or "Re-do this frame")
+            ask = text or "Re-do this frame"
             sb("change", slug, row["shot"], *([vnum] if vnum else []), "--text", ask)
             r.send("%s on %s (blocking): %s\nRe-shoot %s with exactly this change (Slate), then Hawk must "
                    "verify the change is visible and approve the NEW version with --resolves. Nothing downstream "
-                   "(Lore, Cue) until `sb gate %s` passes; if Lore or Cue already ran, update them for %s afterwards."
-                   % ("DISAPPROVED" if act == "disapprove" else "CHANGE REQUEST", what, ask, row["shot"], slug, row["shot"]),
+                   "(Lore) until `sb gate %s` passes; if Lore already ran, update the bible for %s afterwards. Never run Cue."
+                   % ("CHANGE REQUEST", what, ask, row["shot"], slug, row["shot"]),
                    role="board", by=who, remote=remote)
         elif item:
-            ask = ("Disapproved: " + (text or "make a new one")) if act == "disapprove" else (text or "Re-do this cast item")
-            if act == "disapprove" and img:
-                sb("review", slug, "--cast", row["target"], "--image", img, "rejected", "--notes", text)
+            ask = text or "Re-do this cast item"
             sb("change", slug, "--cast", row["target"], *(["--image", img] if img else []), "--text", ask)
             r.send("%s on cast %s (blocking): %s\nHatch makes a NEW variation (a new file; every earlier one stays on the "
                    "board), registers it with `sb cast` and closes the request with \"resolves\"; then Slate re-shoots every "
                    "shot featuring it and Hawk re-checks. Lore and Cue wait for `sb gate %s`."
-                   % ("DISAPPROVED" if act == "disapprove" else "CHANGE REQUEST", what, ask, slug), role="board", by=who, remote=remote)
+                   % ("CHANGE REQUEST", what, ask, slug), role="board", by=who, remote=remote)
         else:
             r.send("Note on %s%s" % (what, (": " + text) if text else ""), role="board", by=who, remote=remote)
         return self.send(200, {"ok": True})

@@ -3,7 +3,7 @@ name: sb-sw-series-engine-bible
 description: "Shotbird crew skill (Lore): series engine, bible and treatment field tables (source text in Chinese; answer in the user's language). Use inside Shotbird runs when writing the film bible."
 ---
 
-> **Shotbird install note.** Installed for Abdullah's Shotbird crew from a pinned GitHub commit (see ATTRIBUTION.md). Scripts, databases, CI and settings files were not installed: skip any step that runs a script, installs software, uploads media to third-party sites or writes to a local database. Shotbird logs work through `sb.py` and each agent's memory. Abdullah's house rules (Obsidian vault playbooks and the agent's own instructions) take precedence over this skill.
+> **Shotbird install note.** Installed for {{NAME}}'s Shotbird crew from a pinned GitHub commit (see ATTRIBUTION.md). Scripts, databases, CI and settings files were not installed: skip any step that runs a script, installs software, uploads media to third-party sites or writes to a local database. Shotbird logs work through `sb.py` and each agent's memory. {{NAME}}'s house rules (Obsidian vault playbooks and the agent's own instructions) take precedence over this skill.
 
 
 # 剧集引擎与剧集圣经（Series Engine & Bible）
@@ -129,7 +129,7 @@ reference.md／reference-documents.md／reference-samples.md 都是查表用的�
 
 **22. familial role 分配库**（同章）：不必凑齐性别年龄，要确定"每个人物在正面和负面两个方向上会如何对待彼此"。（角色库全表与执法搭档／职场同事的推论见 reference.md 六）
 
-**23. transactional family（Logan Roy 范式）**（同章）："寻求老板认可会取代寻求父母认可——而且前者还附带薪水作为额外确认"；Logan "withholding his approval and validation"，"His relationships with his kids are all transactional."
+**23. transactional family（Logan Roy 范式）**（同章）："寻求老板认可会取代寻求父母认可——而且前者还附带薪水作为额外确认"；Logan "withholding their approval and validation"，"Their relationships with their kids are all transactional."
 
 **24. 三条场景级规则**（同章）：**"the people who love you most know how to hurt you the most."**→写两人场前先确定"他知道对方哪个按钮"，再决定按不按。（新人物测试与潜文本公式原文见 reference.md 六）
 
@@ -143,7 +143,7 @@ reference.md／reference-documents.md／reference-samples.md 都是查表用的�
 
 **29. 羞耻与空洞**（Landau 2e ch7，引 Brené Brown《Daring Greatly》）：**shame = our fear of disconnection**；创伤造成 **emotional voids**→voids 产生回避脆弱的 coping mechanisms。**"Anyone who challenges any of these constructs becomes an antagonist."**（三类防御的设计菜单见 reference.md 六）
 
-**30. grounded superpower 同时是 liability**（Landau 2e ch5，Gilligan 的造人法）：Walt 的超能力是"自欺的能力"。1e Tip 8：**"when a character's greatest strength also becomes his or her greatest liability… The trick to dramatic sustainability is keeping your main character in this form of limbo."**（三例与方框全文见 reference.md 六）
+**30. grounded superpower 同时是 liability**（Landau 2e ch5，Gilligan 的造人法）：Walt 的超能力是"自欺的能力"。1e Tip 8：**"when a character's greatest strength also becomes their or her greatest liability… The trick to dramatic sustainability is keeping your main character in this form of limbo."**（三例与方框全文见 reference.md 六）
 
 **31. 同一 backstory 的两次陈述**（Landau 2e ch7，Mare of Easttown）：**先给修饰版，几集后在更安全或更被迫的场合给真版本；落差就是人物的 shame。**（两段台词原文与群像配平见 reference.md 六）
 
@@ -151,7 +151,7 @@ reference.md／reference-documents.md／reference-samples.md 都是查表用的�
 
 **33. 对抗力先定性质，再决定要不要一张脸**（Landau 2e ch9）：**Succession＝greed**；**Mare of Easttown 与 Fleabag＝grief**。总原则（脚注归 UCLA 荣休教授 Howard Suber）：**"All villains are antagonists, but not all antagonists are villains."**（九部剧的性质对照与 Oberg 的补充见 reference.md 六）
 
-**34. 反派在自己的故事里是英雄**（同章）：**"Every villain is the hero of his/her/their own story."**——"they usually feel justified, entitled, and downright righteous"。结构判断：**"as soon as that primary goal is successfully attained, the series is usually over – unless it pivots to another overarching mission or goal."**（四条附则与 Rue 的错位案例见 reference.md 六）
+**34. 反派在自己的故事里是英雄**（同章）：**"Every villain is the hero of their/her/their own story."**——"they usually feel justified, entitled, and downright righteous"。结构判断：**"as soon as that primary goal is successfully attained, the series is usually over – unless it pivots to another overarching mission or goal."**（四条附则与 Rue 的错位案例见 reference.md 六）
 
 **35. 不要立草人**（Kings 夫妇，Landau 2e ch4）：**"Propaganda is confirming what you already believe."** 更值的是让**我们喜欢的常规角色彼此不同意、且每个人都有道理**。（全段与 The Good Wife 范例见 reference.md 六）
 

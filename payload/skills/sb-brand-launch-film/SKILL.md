@@ -3,7 +3,7 @@ name: sb-brand-launch-film
 description: "Shotbird crew skill (Scout): brand and launch film strategy spine (current belief, needed belief, one promise, proof ladder), named story routes, a hook-promise-proof-meaning-CTA script hierarchy with 15/30/60-90s runtime rules, and a cutdown matrix. Use inside Shotbird runs for scripts and format planning."
 ---
 
-> **Shotbird install note.** Installed for Abdullah's Shotbird crew from a pinned GitHub commit (see ATTRIBUTION.md). Only Markdown and data were installed: skip any step that runs a script, installs software, needs an API key, uploads media to third-party sites or writes to a local database. Abdullah's house rules (Obsidian vault playbooks and the agent's own instructions) take precedence over this skill.
+> **Shotbird install note.** Installed for {{NAME}}'s Shotbird crew from a pinned GitHub commit (see ATTRIBUTION.md). Only Markdown and data were installed: skip any step that runs a script, installs software, needs an API key, uploads media to third-party sites or writes to a local database. {{NAME}}'s house rules (Obsidian vault playbooks and the agent's own instructions) take precedence over this skill.
 
 
 # Brand launch film production

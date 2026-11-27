@@ -5,7 +5,7 @@ description: "Shotbird crew skill (Hawk): reference pack for judging AI storyboa
 
 # Frame QC references (Shotbird · Hawk)
 
-These are cherry-picked references. Read the one that matches the check you're making. The verdict rules in your own `hawk.md` and Abdullah's house style always win.
+These are cherry-picked references. Read the one that matches the check you're making. The verdict rules in your own `hawk.md` and {{NAME}}'s house style always win.
 
 | Check | Read | Gives you |
 |---|---|---|

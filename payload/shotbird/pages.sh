@@ -13,6 +13,7 @@ TARGET="$2"
 [ "$1" = "update" ] && [ -n "$TARGET" ] || { echo "usage: pages.sh update <url|off>" >&2; exit 2; }
 case "$TARGET" in
   off) ;;
+  https://api.trycloudflare.com) echo "pages.sh: refusing Cloudflare's own address" >&2; exit 2 ;;
   https://*.trycloudflare.com) ;;
   *) echo "pages.sh: refusing to publish $TARGET" >&2; exit 2 ;;
 esac
@@ -25,14 +26,20 @@ cd "$W"
 /usr/bin/git config user.name "Shotbird"
 /usr/bin/git config user.email "shotbird@users.noreply.github.com"
 : >.nojekyll
+OFF='<p>Shotbird is offline right now.</p><p class="s">Ask the person who runs it to switch it back on.</p>'
 if [ "$TARGET" = "off" ]; then
-  BODY='<p>Shotbird is offline right now.</p><p class="s">Ask the person who runs it to switch it back on.</p>'
-  SCRIPT=''
+  URL=""; BODY="$OFF"
 else
-  BODY="<p>Opening Shotbird…</p><p class=\"s\"><a href=\"$TARGET/\">Tap here if nothing happens</a></p>"
-  # keep ?p=<project>#tab, so a bookmarked project still opens on the right page
-  SCRIPT="<script>location.replace('$TARGET/'+location.search+location.hash)</script>"
+  URL="$TARGET"; BODY="<p>Opening Shotbird…</p><p class=\"s\"><a href=\"$TARGET/\">Tap here if nothing happens</a></p>"
 fi
+printf '{"url": "%s"}\n' "$URL" >target.json
+# Browsers may keep this page for 10 minutes (GitHub Pages' cache time), long after the link has changed, so the page
+# asks for target.json fresh and only falls back to the link it was built with. ?p=<project>#tab carries through.
+SCRIPT="<script>
+function go(u){ if(!u){ document.getElementById('b').innerHTML='$OFF'; return; }
+  location.replace(u.replace(/\/\$/,'')+'/'+location.search+location.hash); }
+fetch('target.json?t='+Date.now(),{cache:'no-store'}).then(function(r){return r.json()}).then(function(j){go(j.url)},function(){go('$URL')});
+</script>"
 /bin/cat >index.html <<EOF
 <!doctype html>
 <html lang="en">
@@ -48,7 +55,7 @@ body{margin:0;min-height:100vh;display:grid;place-items:center;font:15px/1.5 sys
 p{margin:0 0 6px}.s{color:#a1a1aa;font-size:13px}a{color:#ff6b3d}
 </style>
 </head>
-<body><div><div class="m"></div>$BODY</div>$SCRIPT</body>
+<body><div><div class="m"></div><div id="b">$BODY</div></div>$SCRIPT</body>
 </html>
 EOF
 /usr/bin/git add -A

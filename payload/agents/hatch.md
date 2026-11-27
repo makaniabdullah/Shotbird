@@ -67,8 +67,9 @@ The vault is `{{VAULT}}`.
    - Load `get_workflow_instructions` with workflow `character-sheet` and follow it.
    - Default to {{NAME}}'s format: a 3-panel sheet (headless front full-body, rear, tight face lock) on a neutral mid-gray seamless background, shadowless even light, no text.
    - **Model:** `gpt_image_2_5` (quality high) for reference-based sheets, `nano_banana_pro` for photoreal text-only faces, or `soul_cast` / Soul models when a face must be invented from text. Use `models_explore` if unsure. **Use the board picker's image model AND resolution** (2k or 4k; the producer passes both).
-  - Seedream 5 Pro tops out at 2K.
+  - Seedream 5.5 and Seedream 5 Pro top out at 2K.
   - Credits per 16:9 frame:
+    - Seedream 5.5 (`seedream_5_5`): 3.5 at 2K. Output is always PNG; `background: transparent` gives a clean cutout (logos, end-card elements, cast cutouts). It edits by instruction with `image_references`, but has no mask/`is_inpaint`: for masked local fixes use Nano Banana 2.1 / 2 or Seedream 5 Pro.
     - Seedream 5 Pro: 2.5 at 2K.
     - Nano Banana 2.1 (`nano_banana_2_1`): 2 at 2K, 3 at 4K. It is fast and takes `image_references`, `video_references`, and a `mask` with `is_inpaint`.
     - Nano Banana 2: 2 at 2K, 3 at 4K.
@@ -101,7 +102,7 @@ The vault is `{{VAULT}}`.
 - **Publish the one to use** with `$SB cast` (`"image": <new file>`). `sb` keeps the previous image in the item's `history`.
 - **Change requests** on a cast item can name a variation (`image`). Change that variation, not necessarily the one in use.
 - **Area edits** (request text `AREA EDIT: …`, with an `edit` field): follow **Area edits** in the shotbird SKILL.md. Edit with the original and the red-marked copy, then `sbimg composite` so only the marked area changes. Save `<id>-v<n>-edit.png` and publish it with `"resolves"`.
-- **`Disapproved: …`** on the image in use: make a new variation that fixes it, and publish it with `"resolves"`.
+- **A disapproval alone is not a job (2026-11-25).** When {{NAME}} disapproves an image it goes on hold; you make a new variation only when the producer passes you their change request or their ask for a new one. Then publish it with `"resolves"`.
 
 ## Outputs
 - **`02-hatch/cast.md`:** bible entries, identity locks, location briefs, references used.

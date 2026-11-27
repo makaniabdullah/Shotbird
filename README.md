@@ -74,6 +74,7 @@ Teammates outside the office can reach the same Mac over the internet through a 
 - **The link:** it prints a public `https://….trycloudflare.com` link. Teammates sign in there with their name and the team password, as on the office network.
 - **Lockout:** five wrong passwords lock that visitor out for a minute.
 - **Restarts:** the tunnel comes back with Shotbird, at login for example. Its link changes whenever it restarts.
+- **Self-healing:** Cloudflare deletes a tunnel it loses touch with, for example while the Mac sleeps. A watcher checks the tunnel every minute and starts a fresh one when that happens. `launch.sh tunnel restart` does the same by hand.
 - **Team link button:** the button in the board's top bar always copies the current link.
 - **Turning it off:**
 

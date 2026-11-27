@@ -169,6 +169,8 @@ def blockers(s, shot=None):
     """Everything that must be fixed before Lore writes the bible or Cue writes a shot's prompt."""
     out = []
     for c in s.get("cast", []):
+        if c.get("status") == "rejected" and not open_requests(c):
+            out.append("cast %s: disapproved by {{NAME}} — on hold until he approves another variation or asks for a new one" % c.get("id"))
         for r in open_requests(c):
             out.append("cast %s: open change request — %s" % (c.get("id"), r.get("text", "")))
     for sh in s.get("shots", []):
@@ -413,7 +415,9 @@ def main():
         elif a.cmd == "prompt":
             problems = []
             for it in (lambda d: d if isinstance(d, list) else [d])(payload(a)):
-                b = blockers(st.s, it.get("shot"))
+                # a prompt studio has no frames to approve, and a text-to-video prompt doesn't start from one
+                free = st.s.get("project", {}).get("kind") == "prompter" or it.get("mode") == "t2v"
+                b = [] if free else blockers(st.s, it.get("shot"))
                 if b:
                     problems.append("%s is not ready for a video prompt: %s" % (it.get("shot"), "; ".join(b)))
                 errs = audio_rule_errors((it.get("prompt") or "") + "\n" + (it.get("audio") or ""))
